@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 
 from django.contrib.auth.models import User
@@ -60,4 +61,32 @@ def registerPage(request):
 
 @login_required
 def dashboard(request):
-    return render(request, "main/dashboard.html")
+    now = timezone.localtime()
+
+    day = now.strftime("%A")
+    date = now.strftime("%B %d, %Y")
+    time = now.strftime("%I:%M %p")
+
+    return render(
+        request, "main/dashboard.html", {"day": day, "date": date, "time": time}
+    )
+
+
+@login_required
+def pacman(request):
+    return render(request, "main/pacman.html")
+
+
+@login_required
+def snake(request):
+    return render(request, "main/snake.html")
+
+
+@login_required
+def tictactoe(request):
+    return render(request, "main/tictactoe.html")
+
+
+@login_required
+def tiles(request):
+    return render(request, "main/tiles.html")

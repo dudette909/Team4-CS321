@@ -25,4 +25,8 @@ urlpatterns = [
     path("login/", views.loginPage, name="loginPage"),
     path("register/", views.registerPage, name="registerPage"),
     path("dashboard/", views.dashboard, name="dashboard"),
+    path("pacman/", views.pacman, name="pacman"),
+    path("snake/", views.snake, name="snake"),
+    path("tictactoe/", views.tictactoe, name="tictactoe"),
+    path("tiles/", views.tiles, name="tiles"),
 ]

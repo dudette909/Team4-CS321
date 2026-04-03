@@ -1,1 +1,140 @@
-<h1>Welcome {{ request.user.username }}</h1>
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'main/dashboard.css' %}" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <div
+        class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+        style="width: 280px; height: 100vh"
+      >
+        <span class="fs-4">Game-Hub</span>
+        <hr />
+
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="#" class="nav-link active text-white">Home</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link text-white">Settings</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link text-white">Play-History</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link text-white">Virtual-Buddy</a>
+          </li>
+          <li>
+            <a href="{% url 'loginPage' %}" class="nav-link text-white"
+              >Logout</a
+            >
+          </li>
+        </ul>
+
+        <hr />
+      </div>
+
+      <div class="main-content">
+        <nav class="custom-navbar">
+          <div class="nav-left">{{ day }}</div>
+          <div class="nav-center">{{ date }}</div>
+          <div class="nav-right">{{ time }}</div>
+        </nav>
+
+        <div class="content-area">
+          <div class="welcome-message">
+            <h1>Welcome {{ request.user.username }}</h1>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-md-3">
+              <a href="{% url 'pacman' %}" class="game-link">
+                <div class="card dashboard-card">
+                  <div class="card-body">
+                    <h2>Pac-Man</h2>
+                    <img
+                      src="{% static 'main/images/pacman.jpg' %}"
+                      class="card-img"
+                      alt="pacman"
+                    />
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="col-md-3">
+              <a href="{% url 'tictactoe' %}" class="game-link">
+                <div class="card dashboard-card">
+                  <div class="card-body">
+                    <h2>Tic-Tac-toe</h2>
+                    <img
+                      src="{% static 'main/images/Tic_tac_toe.svg' %}"
+                      class="card-img"
+                      alt="Tic-Tac-toe"
+                    />
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="col-md-3">
+              <a href="{% url 'tiles' %}" class="game-link">
+                <div class="card dashboard-card">
+                  <div class="card-body">
+                    <h2>Tiles</h2>
+                    <img
+                      src="{% static 'main/images/tiles.jpg' %}"
+                      class="card-img"
+                      alt="Tiles"
+                    />
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="col-md-3">
+              <a href="{% url 'snake' %}" class="game-link">
+                <div class="card dashboard-card">
+                  <div class="card-body">
+                    <h2>Snake</h2>
+                    <img
+                      src="{% static 'main/images/snake.avif' %}"
+                      class="card-img"
+                      alt="snake"
+                    />
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="play-button">
+            <a href="#" class="btn-random">Random Play</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
