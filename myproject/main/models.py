@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 class InventoryItem(models.Model):
     itemName = models.CharField(max_length = 100)
     description = models.TextField(blank = True)
+    itemImage = models.ImageField(upload_to= "items")
+
 
     def __str__(self):
         return self.itemName

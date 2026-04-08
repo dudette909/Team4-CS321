@@ -90,3 +90,7 @@ def tictactoe(request):
 @login_required
 def tiles(request):
     return render(request, "main/tiles.html")
+
+@login_required
+def virtualBuddy(request):
+    return render(request, "main/virtualBuddy.html")
