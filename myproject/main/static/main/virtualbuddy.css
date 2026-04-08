@@ -1,0 +1,41 @@
+.buddy-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.avatar-selection {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+.avatar {
+    width: 300px;
+    height: auto;
+}
+
+.inventory-section {
+    display: flex;
+    flex: 1;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4,80px);
+    gap: 10px;
+}
+
+.cell {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #e97171
+}
+
+.cell img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

@@ -5,6 +5,26 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Testing Virtual Buddy page</title>
+        <link rel="stylesheet" href="{% static 'main/virtualbuddy.css' %}" />
     </head>
+
+    <div class = "buddy-container">
+        <!-- LEFT: THE AVATAR -->
+         <div class="avatar-selection">
+            <img src="/media/test_image.png" class="avatar">
+
+         </div>
+
+        <!-- RIGHT: Inventory Grid -->
+         <div class="inventory-section">
+            <div class="grid">
+                {% for item in backpack.items.all % }
+                    <div class="cell">
+                        <img src="{{ item.itemImage.url }}" alt="{{ item.itemName }}">
+                    </div>
+                {% endfor %}
+            </div>
+         </div>
+    </div>
 
 </html>

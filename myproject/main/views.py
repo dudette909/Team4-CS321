@@ -7,6 +7,7 @@ from django.utils import timezone
 
 
 from django.contrib.auth.models import User
+from .models import Backpack # So it's looking at OUR models.py file, and then imports the CLASS "Backpack" that we defined in there.
 
 
 # Create your views here.
@@ -93,4 +94,5 @@ def tiles(request):
 
 @login_required
 def virtualBuddy(request):
-    return render(request, "main/virtualBuddy.html")
+    backpack = Backpack.objects.get(user=request.user)
+    return render(request, "main/virtualBuddy.html", {"backpack": backpack})
