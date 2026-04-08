@@ -1,0 +1,2 @@
+this folder is where django is going to store the media files and it should refer back to this folder.
+So the images of the cosmetic items should go here.
