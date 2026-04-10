@@ -69,13 +69,13 @@
           </div>
 
           <div class="row g-4">
-            <div class="col-md-3">
-              <a href="{% url 'pacman' %}" class="game-link">
+            <div class="col-3">
+              <a href="{% url 'hangman' %}" class="game-link">
                 <div class="card dashboard-card">
                   <div class="card-body">
-                    <h2>Pac-Man</h2>
+                    <h2>Hangman</h2>
                     <img
-                      src="{% static 'main/images/pacman.jpg' %}"
+                      src="{% static 'main/images/hangman.png' %}"
                       class="card-img"
                       alt="pacman"
                     />
@@ -84,7 +84,7 @@
               </a>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-3">
               <a href="{% url 'tictactoe' %}" class="game-link">
                 <div class="card dashboard-card">
                   <div class="card-body">
@@ -99,22 +99,22 @@
               </a>
             </div>
 
-            <div class="col-md-3">
-              <a href="{% url 'tiles' %}" class="game-link">
+            <div class="col-3">
+              <a href="{% url 'mindmosaic' %}" class="game-link">
                 <div class="card dashboard-card">
                   <div class="card-body">
-                    <h2>Tiles</h2>
+                    <h2>Mind Mosaic</h2>
                     <img
-                      src="{% static 'main/images/tiles.jpg' %}"
+                      src="{% static 'main/images/mindmosaic.jpg' %}"
                       class="card-img"
-                      alt="Tiles"
+                      alt="Mind Mosaic"
                     />
                   </div>
                 </div>
               </a>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-3">
               <a href="{% url 'snake' %}" class="game-link">
                 <div class="card dashboard-card">
                   <div class="card-body">
@@ -131,7 +131,7 @@
           </div>
 
           <div class="play-button">
-            <a href="#" class="btn-random">Random Play</a>
+            <a href="{%url 'random_game'%}" class="btn-random">Random Play</a>
           </div>
         </div>
       </div>

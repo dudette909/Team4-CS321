@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-
+import random
 
 from django.contrib.auth.models import User
 
@@ -73,8 +73,8 @@ def dashboard(request):
 
 
 @login_required
-def pacman(request):
-    return render(request, "main/pacman.html")
+def hangman(request):
+    return render(request, "main/hangman.html")
 
 
 @login_required
@@ -88,9 +88,20 @@ def tictactoe(request):
 
 
 @login_required
-def tiles(request):
-    return render(request, "main/tiles.html")
-
-@login_required
 def virtualBuddy(request):
     return render(request, "main/virtualBuddy.html")
+
+
+def mindmosaic(request):
+    return render(request, "main/mindmosaic.html")
+
+
+@login_required
+def random_game(request):
+    games = [
+        "main/hangman.html",
+        "main/snake.html",
+        "main/tictactoe.html",
+        "main/mindmosaic.html",
+    ]
+    return render(request, random.choice(games))

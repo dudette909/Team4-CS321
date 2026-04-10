@@ -27,11 +27,16 @@ urlpatterns = [
     path("login/", views.loginPage, name="loginPage"),
     path("register/", views.registerPage, name="registerPage"),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("pacman/", views.pacman, name="pacman"),
+    path("hangman/", views.hangman, name="hangman"),
     path("snake/", views.snake, name="snake"),
     path("tictactoe/", views.tictactoe, name="tictactoe"),
+<<<<<<< HEAD
     path("tiles/", views.tiles, name="tiles"),
     path("virtualBuddy/", views.virtualBuddy, name="virtualBuddy")
+=======
+    path("mindmosaic/", views.mindmosaic, name="mindmosaic"),
+    path("random_game/", views.random_game, name="random_game"),
+>>>>>>> 48a1c1b (games implemented)
 ]
 
 if settings.DEBUG:
