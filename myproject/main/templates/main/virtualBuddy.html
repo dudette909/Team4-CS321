@@ -18,7 +18,7 @@
         <!-- RIGHT: Inventory Grid -->
          <div class="inventory-section">
             <div class="grid">
-                {% for item in backpack.items.all % }
+                {% for item in backpack.items.all %}
                     <div class="cell">
                         <img src="{{ item.itemImage.url }}" alt="{{ item.itemName }}">
                     </div>

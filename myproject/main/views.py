@@ -94,5 +94,6 @@ def tiles(request):
 
 @login_required
 def virtualBuddy(request):
+    backpack, created = Backpack.objects.get_or_create(user=request.user)
     backpack = Backpack.objects.get(user=request.user)
     return render(request, "main/virtualBuddy.html", {"backpack": backpack})
