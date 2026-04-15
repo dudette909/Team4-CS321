@@ -26,6 +26,8 @@
     display: grid;
     grid-template-columns: repeat(4,80px);
     gap: 10px;
+    background-color: #342f3d;
+    border-color:aquamarine;
 }
 
 .cell {
