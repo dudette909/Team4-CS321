@@ -31,9 +31,11 @@
 
 .cell-container {
     color: black;
+    background-color: aqua;
     border-radius: 20px;
     width: 80px;
     height: 80px;
+    align-items: center;
 }
 
 .cell {
