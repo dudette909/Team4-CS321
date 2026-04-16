@@ -8,15 +8,12 @@ const minefield =
         "minefield"
     );
 let board = [];
+let gameOver = false;
 
 function initializeBoard() {
     for (let i = 0; i < numRows; i++) {
         board[i] = [];
-        for (
-            let j = 0;
-            j < numCols;
-            j++
-        ) {
+        for ( let j = 0; j < numCols; j++ ) {
             board[i][j] = {
                 isMine: false,
                 revealed: false,
@@ -24,77 +21,42 @@ function initializeBoard() {
             };
         }
     }
+    gameOver = false;
 
     // Place mines randomly
     let minesPlaced = 0;
     while (minesPlaced < numMines) {
-        const row = Math.floor(
-            Math.random() * numRows
-        );
-        const col = Math.floor(
-            Math.random() * numCols
-        );
+        const row = Math.floor(Math.random() * numRows);
+        const col = Math.floor(Math.random() * numCols);
+        
         if (!board[row][col].isMine) {
-            board[row][
-                col
-            ].isMine = true;
+            board[row][col].isMine = true;
             minesPlaced++;
         }
     }
 
     // Calculate counts
     for (let i = 0; i < numRows; i++) {
-        for (
-            let j = 0;
-            j < numCols;
-            j++
-        ) {
+        for ( let j = 0; j < numCols; j++ ) {
             if (!board[i][j].isMine) {
                 let count = 0;
-                for (
-                    let dx = -1;
-                    dx <= 1;
-                    dx++
-                ) {
-                    for (
-                        let dy = -1;
-                        dy <= 1;
-                        dy++
-                    ) {
-                        const ni =
-                            i + dx;
-                        const nj =
-                            j + dy;
-                        if (
-                            ni >= 0 &&
-                            ni <
-                                numRows &&
-                            nj >= 0 &&
-                            nj <
-                                numCols &&
-                            board[ni][
-                                nj
-                            ].isMine
-                        ) {
+                for ( let dx = -1; dx <= 1; dx++ ) {
+                    for ( let dy = -1; dy <= 1; dy++ ) {
+                        const ni = i + dx;
+                        const nj = j + dy;
+                        if ( ni >= 0 && ni < numRows && nj >= 0 && nj < numCols && board[ni][nj].isMine ) {
                             count++;
                         }
                     }
                 }
-                board[i][j].count =
-                    count;
+                board[i][j].count = count;
             }
         }
     }
 }
 
 function revealCell(row, col) {
-    if (
-        row < 0 ||
-        row >= numRows ||
-        col < 0 ||
-        col >= numCols ||
-        board[row][col].revealed
-    ) {
+    if ( row < 0 || row >= numRows || col < 0 || col >= numCols || board[row][col].revealed ) {
         return;
     }
 
@@ -102,32 +64,17 @@ function revealCell(row, col) {
 
     if (board[row][col].isMine) {
         // Handle game over
-        alert(
-            "Game Over! You stepped on a mine."
-        );
-    } else if (
-        board[row][col].count === 0
-    ) {
+        alert("Game Over! You stepped on a mine.");
+        gameOver = true;
+    } else if ( board[row][col].count === 0 ) {
         // If cell has no mines nearby,
         // Reveal adjacent cells
-        for (
-            let dx = -1;
-            dx <= 1;
-            dx++
-        ) {
-            for (
-                let dy = -1;
-                dy <= 1;
-                dy++
-            ) {
-                revealCell(
-                    row + dx,
-                    col + dy
-                );
+        for ( let dx = -1; dx <= 1; dx++ ) {
+            for ( let dy = -1; dy <= 1; dy++ ) {
+                revealCell( row + dx, col + dy );
             }
         }
     }
-
     renderBoard();
 }
 
@@ -135,43 +82,28 @@ function renderBoard() {
     minefield.innerHTML = "";
 
     for (let i = 0; i < numRows; i++) {
-        for (
-            let j = 0;
-            j < numCols;
-            j++
-        ) {
+        for ( let j = 0; j < numCols; j++ ) {
             const cell =
-                document.createElement(
-                    "div"
-                );
+                document.createElement( "div" );
             cell.className = "cell";
-            if (board[i][j].revealed) {
-                cell.classList.add(
-                    "revealed"
-                );
-                if (
-                    board[i][j].isMine
-                ) {
-                    cell.classList.add(
-                        "mine"
-                    );
-                    cell.textContent =
-                        "????";
-                } else if (
-                    board[i][j].count >
-                    0
-                ) {
-                    cell.textContent =
-                        board[i][
-                            j
-                        ].count;
+
+            if ( board[i][j].revealed ) {
+                cell.classList.add("revealed");
+
+                if ( board[i][j].isMine ) { // the game over, you clicked a mine
+                    cell.classList.add( "mine" );
+                    cell.textContent = "\u{1F4A3}";
+                    //gameOver = true;
+
+                } else if ( board[i][j].count > 0 ) {
+                    cell.textContent = board[i][j].count;
                 }
             }
-            cell.addEventListener(
-                "click",
-                () => revealCell(i, j)
-            );
-            minefield.appendChild(cell);
+            if (!gameOver) {
+                cell.addEventListener( "click", () => revealCell(i, j) );
+                             
+            }
+            minefield.appendChild(cell);   
         }
         minefield.appendChild(
             document.createElement("br")
