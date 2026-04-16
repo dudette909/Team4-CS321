@@ -17,14 +17,17 @@
 
         <!-- RIGHT: Inventory Grid -->
          <div class="inventory-section">
-            <div class="grid" style="background-color: #342f3d;">
+            <div class="grid">
                 {% for item in backpack.items.all %}
                 <!--
                     <p>TEST ITEM: {{ item.itemName }}</p>
                     <img src="{{ item.itemImage.url }}" style="width:100px;">
                 -->
-                    <div class="cell">
-                        <img src="{{ item.itemImage.url }}" alt="{{ item.itemName }}">
+                    <div class="cell-container">
+                        <p>Item 1</p>
+                        <div class="cell">
+                            <img src="{{ item.itemImage.url }}" alt="{{ item.itemName }}">
+                        </div>
                     </div>
                 {% empty %}
                     <p>NO ITEMS</p>

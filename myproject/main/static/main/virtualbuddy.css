@@ -23,17 +23,22 @@
 }
 
 .grid {
+    background-color:#e97171;
     display: grid;
     grid-template-columns: repeat(4,80px);
     gap: 10px;
-    background-color: #342f3d;
-    border-color:aquamarine;
+}
+
+.cell-container {
+    color: black;
+    border-radius: 20px;
+    width: 80px;
+    height: 80px;
 }
 
 .cell {
-    width: 70px;
-    height: 70px;
-    border: 2px solid #e97171
+    width: 60px;
+    height: 60px;
 }
 
 .cell img{
