@@ -9,6 +9,7 @@ const minefield =
     );
 let board = [];
 let gameOver = false;
+let victory = false;
 
 function initializeBoard() {
     for (let i = 0; i < numRows; i++) {
@@ -23,6 +24,7 @@ function initializeBoard() {
         }
     }
     gameOver = false;
+    victory = false;
 
     // Place mines randomly
     let minesPlaced = 0;
@@ -80,7 +82,6 @@ function revealCell(row, col) {
 }
 
 function toggleCell(row, col) {
-    alert("toggled test");
     if ( row < 0 || row >= numRows || col < 0 || col >= numCols || board[row][col].revealed ) {
         return;
     }
@@ -113,6 +114,7 @@ function renderBoard() {
                 if ( board[i][j].isMine ) { // the game over, you clicked a mine
                     cell.classList.add( "mine" );
                     cell.textContent = "\u{1F4A3}";
+                    victory = false;
                     //gameOver = true;
 
                 } else if ( board[i][j].count > 0 ) {
@@ -132,6 +134,15 @@ function renderBoard() {
             document.createElement("br")
         );
     }
+    if (gameOver) {
+        endGame(victory);
+    }
+}
+
+function endGame(viko) {
+    alert("endgame test");
+    fetch("/save-mines-result/", { method: postMessage, headers: {"Content-Type": "application/json", "X-CSRFToken": getCSRFToken()},
+    body: JSON.stringify({victory: viko}) } ).then(response => response.json()).then(data => console.log(data));
 }
 
 initializeBoard();

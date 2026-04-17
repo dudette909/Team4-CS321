@@ -8,6 +8,9 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 from .models import Backpack # So it's looking at OUR models.py file, and then imports the CLASS "Backpack" that we defined in there.
+from .models import GameResult
+import json
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -100,4 +103,21 @@ def virtualBuddy(request):
 
 @login_required
 def mines(request):
+    result = GameResult.objects.filter(user=request.user, gameName="mines").first()
+    if result and result.lastPlayedTime:
+        now = timezone.localtime()
+        lastTimePlayed = timezone.localtime(result.lastPlayedTime)
+
+        if lastTimePlayed.date() == result.lastPlayedTime.date():
+            return render(request, "main/blockedGame.html")
+
     return render(request, "main/mines.html")
+
+@login_required
+def saveMinesResults(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        victory = data.get("victory")
+        print("Received: ", victory)
+        GameResult.objects.update_or_create(user=request.user, gameName="mines", defaults={"lastPlayedTime": timezone.localdate, "hasPlayed": True, "victory": victory} )
+        return JsonResponse({"status": "ok"}) # a basic success response to django from js. NOT the SUCCESS of the player, rather a success that the info was saved.
