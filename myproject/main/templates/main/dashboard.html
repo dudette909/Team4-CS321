@@ -38,13 +38,19 @@
             <a href="#" class="nav-link active text-white">Home</a>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">Settings</a>
+            <a href="{% url 'settings' %}" class="nav-link text-white"
+              >Settings</a
+            >
           </li>
           <li>
-            <a href="#" class="nav-link text-white">Play-History</a>
+            <a href="{% url 'play_history' %}" class="nav-link text-white"
+              >Play-History</a
+            >
           </li>
           <li>
-            <a href="{% url 'virtualBuddy' %}" class="nav-link text-white">Virtual-Buddy</a>
+            <a href="{% url 'virtualBuddy' %}" class="nav-link text-white"
+              >Virtual-Buddy</a
+            >
           </li>
           <li>
             <a href="{% url 'loginPage' %}" class="nav-link text-white"
@@ -70,14 +76,18 @@
 
           <div class="row g-4">
             <div class="col-3">
-              <a href="{% url 'hangman' %}" class="game-link">
+              <a
+                href="{% url 'hangman' %}"
+                class="game-link"
+                onclick="trackClicks('Hangman')"
+              >
                 <div class="card dashboard-card">
                   <div class="card-body">
                     <h2>Hangman</h2>
                     <img
                       src="{% static 'main/images/hangman.png' %}"
                       class="card-img"
-                      alt="pacman"
+                      alt="hangman"
                     />
                   </div>
                 </div>
@@ -85,7 +95,11 @@
             </div>
 
             <div class="col-3">
-              <a href="{% url 'tictactoe' %}" class="game-link">
+              <a
+                href="{% url 'tictactoe' %}"
+                class="game-link"
+                onclick="trackClicks('TicTacToe')"
+              >
                 <div class="card dashboard-card">
                   <div class="card-body">
                     <h2>Tic-Tac-toe</h2>
@@ -100,7 +114,11 @@
             </div>
 
             <div class="col-3">
-              <a href="{% url 'mindmosaic' %}" class="game-link">
+              <a
+                href="{% url 'mindmosaic' %}"
+                class="game-link"
+                onclick="trackClicks('MindMosaic')"
+              >
                 <div class="card dashboard-card">
                   <div class="card-body">
                     <h2>Mind Mosaic</h2>
@@ -115,7 +133,11 @@
             </div>
 
             <div class="col-3">
-              <a href="{% url 'snake' %}" class="game-link">
+              <a
+                href="{% url 'snake' %}"
+                class="game-link"
+                onclick="trackClicks('Snake')"
+              >
                 <div class="card dashboard-card">
                   <div class="card-body">
                     <h2>Snake</h2>
@@ -136,5 +158,26 @@
         </div>
       </div>
     </div>
+    <script>
+      function getCSRFToken() {
+        return document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("csrftoken="))
+          ?.split("=")[1];
+      }
+
+      function trackClicks(gameName) {
+        fetch("/track-game-click/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSON.stringify({
+            game_name: gameName,
+          }),
+        });
+      }
+    </script>
   </body>
 </html>

@@ -1,0 +1,179 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings</title>
+
+    <style>
+      /* From Uiverse.io by andrew-demchenk0 */
+      .switch {
+        --input-focus: #2d8cf0;
+        --bg-color: #fff;
+        --bg-color-alt: #666;
+        --main-color: #323232;
+        --input-out-of-focus: #ccc;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70px;
+        height: 36px;
+      }
+
+      .toggle {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+      }
+
+      .slider {
+        box-sizing: border-box;
+        border-radius: 100px;
+        border: 2px solid var(--main-color);
+        box-shadow: 4px 4px var(--main-color);
+        position: absolute;
+        cursor: pointer;
+        inset: 0;
+        background-color: var(--input-out-of-focus);
+        transition: 0.3s;
+      }
+
+      .slider:before {
+        content: "off";
+        box-sizing: border-box;
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        left: 2px;
+        bottom: 1px;
+        border: 2px solid var(--main-color);
+        border-radius: 100px;
+        background-color: var(--bg-color);
+        color: var(--main-color);
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        line-height: 25px;
+        transition: 0.3s;
+      }
+
+      .toggle:checked + .slider {
+        background-color: var(--input-focus);
+      }
+
+      .toggle:checked + .slider:before {
+        content: "on";
+        transform: translateX(32px);
+      }
+    </style>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="{% static 'main/dashboard.css' %}" />
+  </head>
+
+  <body>
+    <div class="d-flex">
+      <div
+        class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+        style="width: 280px; height: 100vh"
+      >
+        <span class="fs-4">Game-Hub</span>
+        <hr />
+
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li>
+            <a href="{% url 'dashboard' %}" class="nav-link text-white">Home</a>
+          </li>
+          <li>
+            <a href="{% url 'settings' %}" class="nav-link active text-white"
+              >Settings</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'play_history' %}" class="nav-link text-white"
+              >Play-History</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'virtualBuddy' %}" class="nav-link text-white"
+              >Virtual-Buddy</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'loginPage' %}" class="nav-link text-white"
+              >Logout</a
+            >
+          </li>
+        </ul>
+
+        <hr />
+      </div>
+
+      <div class="main-content">
+        <div class="content-area">
+          <div class="welcome-message">
+            <h1>Welcome to Settings</h1>
+          </div>
+
+          <div style="margin-top: 20px">
+            <h2 style="display: inline-block; margin-right: 20px">
+              Do Not Send Email
+            </h2>
+
+            <label class="switch" style="display: inline-block">
+              <input
+                type="checkbox"
+                class="toggle"
+                id="doNotDisturbToggle"
+                {%
+                if
+                not
+                player.email_notifications
+                %}checked{%
+                endif
+                %}
+              />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function getCSRFToken() {
+        return document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("csrftoken="))
+          ?.split("=")[1];
+      }
+
+      document
+        .getElementById("doNotDisturbToggle")
+        .addEventListener("change", function () {
+          fetch("{% url 'settings' %}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify({
+              do_not_disturb: this.checked,
+            }),
+          });
+        });
+    </script>
+  </body>
+</html>

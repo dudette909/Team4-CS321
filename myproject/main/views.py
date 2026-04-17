@@ -5,8 +5,12 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 import random
-
 from django.contrib.auth.models import User
+from .models import Player
+from .utils import *
+from .models import Game
+import json
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -53,7 +57,7 @@ def registerPage(request):
         user = User.objects.create_user(
             username=username, email=email, password=password1
         )
-
+        Player.objects.create(user=user)
         return redirect("loginPage")
 
     return render(request, "main/register.html")
@@ -105,3 +109,41 @@ def random_game(request):
         "main/mindmosaic.html",
     ]
     return render(request, random.choice(games))
+
+
+def track_game_click(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        game_name = data.get("game_name")
+
+        increment_times_played(game_name)
+
+        return JsonResponse({"status": "ok"})
+
+
+def play_history(request):
+    ranked_games = Game.objects.order_by("-times_played")
+
+    return render(
+        request,
+        "main/play_history.html",
+        {
+            "ranked_games": ranked_games,
+        },
+    )
+
+
+@login_required
+def settings(request):
+    player = request.user.player
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+        do_not_disturb = data.get("do_not_disturb", False)
+
+        player.email_notifications = not do_not_disturb
+        player.save()
+
+        return JsonResponse({"status": "ok"})
+
+    return render(request, "main/settings.html", {"player": player})

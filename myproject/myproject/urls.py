@@ -30,13 +30,12 @@ urlpatterns = [
     path("hangman/", views.hangman, name="hangman"),
     path("snake/", views.snake, name="snake"),
     path("tictactoe/", views.tictactoe, name="tictactoe"),
-<<<<<<< HEAD
-    path("tiles/", views.tiles, name="tiles"),
-    path("virtualBuddy/", views.virtualBuddy, name="virtualBuddy")
-=======
+    path("virtualBuddy/", views.virtualBuddy, name="virtualBuddy"),
     path("mindmosaic/", views.mindmosaic, name="mindmosaic"),
     path("random_game/", views.random_game, name="random_game"),
->>>>>>> 48a1c1b (games implemented)
+    path("track-game-click/", views.track_game_click, name="track_game_click"),
+    path("play-history/", views.play_history, name="play_history"),
+    path("settings/", views.settings, name="settings"),
 ]
 
 if settings.DEBUG:
