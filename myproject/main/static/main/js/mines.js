@@ -17,6 +17,7 @@ function initializeBoard() {
             board[i][j] = {
                 isMine: false,
                 revealed: false,
+                flagged: false,
                 count: 0,
             };
         }
@@ -56,7 +57,7 @@ function initializeBoard() {
 }
 
 function revealCell(row, col) {
-    if ( row < 0 || row >= numRows || col < 0 || col >= numCols || board[row][col].revealed ) {
+    if ( row < 0 || row >= numRows || col < 0 || col >= numCols || board[row][col].revealed || board[row][col].flagged) {
         return;
     }
 
@@ -78,15 +79,34 @@ function revealCell(row, col) {
     renderBoard();
 }
 
+function toggleCell(row, col) {
+    alert("toggled test");
+    if ( row < 0 || row >= numRows || col < 0 || col >= numCols || board[row][col].revealed ) {
+        return;
+    }
+    if (gameOver) {
+        return;
+    }
+    board[row][col].flagged = !board[row][col].flagged;
+    renderBoard();
+}
+
 function renderBoard() {
     minefield.innerHTML = "";
 
     for (let i = 0; i < numRows; i++) {
         for ( let j = 0; j < numCols; j++ ) {
-            const cell =
-                document.createElement( "div" );
+            const cell = document.createElement( "div" );
             cell.className = "cell";
-
+            if (board[i][j].flagged) {
+                cell.classList.add("flagged");
+                cell.textContent = "\u{1F6A9}";
+            } else {
+                if (cell.classList.contains("flagged")) {
+                    cell.classList.remove("flagged");
+                    cell.textContent = "";
+                }
+            }
             if ( board[i][j].revealed ) {
                 cell.classList.add("revealed");
 
@@ -100,8 +120,11 @@ function renderBoard() {
                 }
             }
             if (!gameOver) {
-                cell.addEventListener( "click", () => revealCell(i, j) );
-                             
+                cell.addEventListener("click", () => revealCell(i, j));
+                cell.addEventListener("contextmenu", (event) => {
+                    event.preventDefault();
+                    toggleCell(i, j);
+                });
             }
             minefield.appendChild(cell);   
         }
