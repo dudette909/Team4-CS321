@@ -36,6 +36,7 @@ urlpatterns = [
     path("track-game-click/", views.track_game_click, name="track_game_click"),
     path("play-history/", views.play_history, name="play_history"),
     path("settings/", views.settings, name="settings"),
+    path("logout/", views.logoutPage, name="logoutPage"),
 ]
 
 if settings.DEBUG:
