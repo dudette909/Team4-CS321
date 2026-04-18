@@ -7,8 +7,30 @@
     <link rel="stylesheet" href="{% static 'main/mines.css' %}" />
 
     <body>
+
         <h1>Mines here ya go</h1>
         <div id="minefield"></div>
+        <div class="boxmessage"></div>
+        <p>Congratulations! You won!</p>
     </body>
     <script src="{% static 'main/js/mines.js' %}"></script>
+    <script>
+        // window.onload = function(){
+        //     console.log('Hi Trinity');
+        // }
+        const thing = "{{ lastPlayedDate }}"
+        const todayDate = "{{ dateToday }}"
+        console.log(thing)
+        console.log("hi")
+        console.log(todayDate)
+        if (thing == todayDate) {
+            console.log("gbrhjnehjsbfhje")
+            var x = document.getElementsByClassName("boxmessage");
+            x.style.display = "block";
+            var y = document.getElementById("minefield");
+            y.style.display = "none";
+        }
+        
+
+    </script>
 </html>

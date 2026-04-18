@@ -33,3 +33,12 @@ body {
 .mine {
     background-color: #ff3333;
 }
+
+.boxmessage {
+    display: none;
+    width: 100px;
+    height: 75px;
+    background-color: lightgrey;
+    border: 15px solid lightblue;
+    padding: 10px;
+}

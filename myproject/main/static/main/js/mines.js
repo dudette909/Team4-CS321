@@ -139,10 +139,18 @@ function renderBoard() {
     }
 }
 
+function getCSRFToken() {
+    return document.cookie
+        .split("; ")
+        .find(row => row.startsWith("csrftoken="))
+        .split("=")[1];
+}
+
 function endGame(viko) {
     alert("endgame test");
-    fetch("/save-mines-result/", { method: postMessage, headers: {"Content-Type": "application/json", "X-CSRFToken": getCSRFToken()},
+    fetch("/save-mines-result/", { method: "POST", headers: {"Content-Type": "application/json", "X-CSRFToken": getCSRFToken()},
     body: JSON.stringify({victory: viko}) } ).then(response => response.json()).then(data => console.log(data));
+    //alert("TEST")
 }
 
 initializeBoard();

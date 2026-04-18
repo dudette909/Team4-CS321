@@ -7,8 +7,7 @@ from django.utils import timezone
 
 
 from django.contrib.auth.models import User
-from .models import Backpack # So it's looking at OUR models.py file, and then imports the CLASS "Backpack" that we defined in there.
-from .models import GameResult
+from .models import Backpack, GameResult # So it's looking at OUR models.py file, and then imports the CLASS "Backpack" that we defined in there.
 import json
 from django.http import JsonResponse
 
@@ -104,20 +103,24 @@ def virtualBuddy(request):
 @login_required
 def mines(request):
     result = GameResult.objects.filter(user=request.user, gameName="mines").first()
-    if result and result.lastPlayedTime:
-        now = timezone.localtime()
-        lastTimePlayed = timezone.localtime(result.lastPlayedTime)
-
-        if lastTimePlayed.date() == result.lastPlayedTime.date():
-            return render(request, "main/blockedGame.html")
-
-    return render(request, "main/mines.html")
+    # if result and result.lastPlayedTime:
+    #     todaysDate = timezone.now()
+    lastTimePlayed = timezone.localtime(result.lastPlayedTime)
+    #     print(lastTimePlayed.date())
+    #     print(result.lastPlayedTime.date())
+    #     if lastTimePlayed.date() == todaysDate.date():
+    #         return render(request, "main/blockedGame.html")
+    context = {"lastPlayedDate": lastTimePlayed.date(), "dateToday": timezone.now().date()}
+    return render(request, "main/mines.html", context)
 
 @login_required
-def saveMinesResults(request):
+def saveMinesResults(request): # this should be the request from the js file, so the body if it was properly JSON.stringified should be smth like {"victory": true}
+    print("Received1: ", request.body)
     if request.method == "POST":
-        data = json.loads(request.body)
-        victory = data.get("victory")
-        print("Received: ", victory)
-        GameResult.objects.update_or_create(user=request.user, gameName="mines", defaults={"lastPlayedTime": timezone.localdate, "hasPlayed": True, "victory": victory} )
+        data = json.loads(request.body) # so data should now be the string dictionary {"victory" : boolean_here}
+        victory = data.get("victory") # gets the value of key "victory" in dictionary "data"
+        print("Received2: ", victory) # idk how to use print statements to debug in django it doesn't show up in the terminal ):
+        GameResult.objects.update_or_create(user=request.user, gameName="mines", defaults={"lastPlayedTime": timezone.now(), "hasPlayed": True, "victory": victory} )
+        # It would update any old attempts b/c theyre from days before, or if they haven't attempted this puzzle at all ever, it SHOULD create a new row in database.
+
         return JsonResponse({"status": "ok"}) # a basic success response to django from js. NOT the SUCCESS of the player, rather a success that the info was saved.
