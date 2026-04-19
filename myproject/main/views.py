@@ -98,6 +98,8 @@ def tiles(request):
 def virtualBuddy(request):
     backpack, created = Backpack.objects.get_or_create(user=request.user)
     backpack = Backpack.objects.get(user=request.user)
+    #results = GameResult.objects.filter(user=request.user)
+    #resultsList = list(results)
     return render(request, "main/virtualBuddy.html", {"backpack": backpack})
 
 @login_required
@@ -110,7 +112,7 @@ def mines(request):
     #     print(result.lastPlayedTime.date())
     #     if lastTimePlayed.date() == todaysDate.date():
     #         return render(request, "main/blockedGame.html")
-    context = {"lastPlayedDate": lastTimePlayed.date(), "dateToday": timezone.now().date()}
+    context = {"lastPlayedDate": lastTimePlayed.date(), "dateToday": timezone.localdate()}
     return render(request, "main/mines.html", context)
 
 @login_required
@@ -124,3 +126,14 @@ def saveMinesResults(request): # this should be the request from the js file, so
         # It would update any old attempts b/c theyre from days before, or if they haven't attempted this puzzle at all ever, it SHOULD create a new row in database.
 
         return JsonResponse({"status": "ok"}) # a basic success response to django from js. NOT the SUCCESS of the player, rather a success that the info was saved.
+    
+@login_required
+def checkRewards(request):
+    print("kys")
+    results = list(GameResult.objects.filter(user=request.user))
+    for result in results:
+        if result.victory == True:
+            if result.redeemed == False:
+                # add a new random InventoryItem to user's specific unique backpack here
+                print("hi")
+        

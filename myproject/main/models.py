@@ -24,6 +24,10 @@ class GameResult(models.Model):
     lastPlayedTime = models.DateTimeField(null=True, blank=True)
     hasPlayed = models.BooleanField(null=True, blank=True)
     victory = models.BooleanField(null=True, blank=True)
+    redeemed = models.BooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} {self.gameName} RESULTS"
 
     class Meta:
-        unique_together=('user', 'gameName') # should prevent duplicate rows
+        unique_together=('user', 'gameName') # should prevent duplicate rows(?)
