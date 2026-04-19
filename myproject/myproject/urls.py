@@ -37,6 +37,8 @@ urlpatterns = [
     path("play-history/", views.play_history, name="play_history"),
     path("settings/", views.settings, name="settings"),
     path("logout/", views.logoutPage, name="logoutPage"),
+    path("leaderboard/", views.leaderboard, name="leaderboard"),
+    path("leaderboard/<str:game_name>/", views.game_leaderboard, name="game_leaderboard"),
 ]
 
 if settings.DEBUG:

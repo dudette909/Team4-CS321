@@ -41,3 +41,43 @@ class Game(models.Model):
         return (
             f"{self.name} - High Score: {self.high_score} - Played: {self.times_played}"
         )
+
+
+class GameScore(models.Model):
+    """Track individual user scores for each game"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='game_scores')
+    game_name = models.CharField(max_length=100)
+    score = models.IntegerField()
+    date_played = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-score', '-date_played']
+        verbose_name = 'Game Score'
+        verbose_name_plural = 'Game Scores'
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.game_name}: {self.score}"
+    
+    @classmethod
+    def get_top_scores(cls, game_name, limit=10):
+        """Get top scores for a specific game"""
+        return cls.objects.filter(game_name=game_name).select_related('user')[:limit]
+    
+    @classmethod
+    def get_user_best(cls, user, game_name):
+        """Get user's best score for a specific game"""
+        score = cls.objects.filter(user=user, game_name=game_name).first()
+        return score.score if score else 0
+    
+    @classmethod
+    def get_user_rank(cls, user, game_name):
+        """Get user's rank for a specific game"""
+        user_best = cls.get_user_best(user, game_name)
+        if user_best == 0:
+            return None
+        # Count how many unique users have a better score
+        better_scores = cls.objects.filter(
+            game_name=game_name, 
+            score__gt=user_best
+        ).values('user').distinct().count()
+        return better_scores + 1

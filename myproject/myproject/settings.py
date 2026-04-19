@@ -23,10 +23,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-8lh0_t45-ayvj+u79z!1ds^%1qw=xn0v1@7zsj3-h@nr$jyfk*"
+# Use environment variable in production, fallback to default for development
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-8lh0_t45-ayvj+u79z!1ds^%1qw=xn0v1@7zsj3-h@nr$jyfk*'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -125,5 +129,5 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "gamehubteam4@gmail.com"
-EMAIL_HOST_PASSWORD = "pxmlbxbomioahujw"
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'gamehubteam4@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'pxmlbxbomioahujw')

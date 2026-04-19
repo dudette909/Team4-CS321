@@ -1,4 +1,38 @@
 let words = null;
+let scoreSaved = false;
+
+// Get CSRF token from cookies
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// Save score to server
+function saveScore(finalScore) {
+  if (scoreSaved) return; // Prevent duplicate saves
+  scoreSaved = true;
+  
+  fetch('/hangman/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ score: finalScore })
+  }).then(response => response.json())
+    .then(data => console.log('Score saved:', data))
+    .catch(error => console.error('Error saving score:', error));
+}
 
 const loadWords = async () => {
   try {
@@ -106,6 +140,7 @@ const drawHangman = () => {
     ctx.lineTo(280, 300);
     ctx.stroke();
     disableAllButtons();
+    saveScore(0); // Lost game, score = 0
     showPopup(`Game over! The word was "${word}".`);
   }
 };
@@ -126,7 +161,9 @@ const handleLetterClick = (letter) => {
 
     if (!document.getElementById("word").textContent.includes("_")) {
       disableAllButtons();
-      showPopup(`You win! The word was "${word}".`);
+      const winScore = remainingAttempts * 10; // Score based on remaining attempts
+      saveScore(winScore);
+      showPopup(`You win! The word was "${word}". Score: ${winScore}`);
     }
   } else {
     remainingAttempts -= 1;
@@ -148,6 +185,7 @@ const startNewGame = () => {
   document.getElementById("letters").innerHTML = "";
   guessedLetters.length = 0;
   remainingAttempts = 6;
+  scoreSaved = false; // Reset score saved flag
   updateRemainingAttempts();
   const result = pickRandomWord();
   if (result) {

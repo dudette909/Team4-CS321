@@ -9,6 +9,40 @@ let snake = [{ x: box * 5, y: box * 5 }];
 let direction = "RIGHT";
 let food = generateFood();
 let gameLoop;
+let scoreSaved = false;
+
+// Get CSRF token from cookies
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// Save score to server
+function saveScore(finalScore) {
+  if (scoreSaved) return; // Prevent duplicate saves
+  scoreSaved = true;
+  
+  fetch('/snake/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ score: finalScore })
+  }).then(response => response.json())
+    .then(data => console.log('Score saved:', data))
+    .catch(error => console.error('Error saving score:', error));
+}
 
 function generateFood() {
   let foodX, foodY;
@@ -90,6 +124,7 @@ function checkCollision() {
   ) {
     document.getElementById("gameOver").style.display = "block";
     clearInterval(gameLoop);
+    saveScore(score); // Save score when game ends
   }
 }
 
@@ -98,6 +133,7 @@ function restartGame() {
   direction = "RIGHT";
   score = 0;
   speed = 150;
+  scoreSaved = false; // Reset score saved flag
   document.getElementById("score").innerText = `Score: 0`;
   document.getElementById("gameOver").style.display = "none";
   food = generateFood();

@@ -51,6 +51,7 @@ let cpuSymbol = "o";
 let isGameOver = false;
 let scores = { player: 0, tie: 0, cpu: 0 };
 let difficulty = "medium";
+let scoreSaved = false;
 const winPatterns = [
   [0, 1, 2],
   [3, 4, 5],
@@ -61,6 +62,39 @@ const winPatterns = [
   [0, 4, 8],
   [2, 4, 6], // Diagonals
 ];
+
+// Get CSRF token from cookies
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// Save score to server
+function saveScore(finalScore) {
+  if (scoreSaved) return; // Prevent duplicate saves
+  scoreSaved = true;
+  
+  fetch('/tictactoe/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ score: finalScore })
+  }).then(response => response.json())
+    .then(data => console.log('Score saved:', data))
+    .catch(error => console.error('Error saving score:', error));
+}
 
 // =================================================================================
 // II. EVENT LISTENERS
@@ -150,6 +184,7 @@ function resetBoard() {
   board.fill("");
   isGameOver = false;
   currentPlayer = "x";
+  scoreSaved = false; // Reset score saved flag
   cells.forEach((cell) => {
     cell.className = "board-cell"; // Reset classes
     cell.innerHTML = `<i></i>`;
@@ -242,13 +277,17 @@ function updateTurnIndicator() {
  * @param {string|null} winner - The winning symbol.
  */
 function showResult(isDraw, winner) {
+  let gameScore = 0;
+  
   if (isDraw) {
     scores.tie++;
+    gameScore = 50; // Tie = 50 points
     modalResultText.textContent = "";
     modalWinnerAnnouncement.innerHTML = `<h2 class="tie-color">ROUND TIED</h2>`;
   } else {
     const winnerIsPlayer = winner === playerSymbol;
     winnerIsPlayer ? scores.player++ : scores.cpu++;
+    gameScore = winnerIsPlayer ? 100 : 0; // Win = 100, Loss = 0
     modalResultText.textContent = winnerIsPlayer
       ? "YOU WON!"
       : "OH NO, YOU LOST...";
@@ -258,6 +297,8 @@ function showResult(isDraw, winner) {
     modalWinnerAnnouncement.querySelector(".icon-winner").style.color =
       winner === "x" ? "var(--clr-light-blue)" : "var(--clr-light-yellow)";
   }
+  
+  saveScore(gameScore); // Save score to server
   updateScoreboard();
   showModal(resultModal);
 }
