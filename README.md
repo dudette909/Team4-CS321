@@ -4,8 +4,9 @@ A web-based gaming platform built with Django featuring multiple interactive gam
 
 ## 🎮 Features
 
-- **3 Interactive Games:** Hangman, Snake, and Tic-Tac-Toe
+- **4 Interactive Games:** Hangman, Snake, Tic-Tac-Toe, and Mind Mosaic
 - **User Authentication:** Secure login and registration system
+- **Leaderboard System:** Track and compete with per-user score rankings
 - **Game Analytics:** Track play history and high scores
 - **Email Notifications:** Automated reminders to keep users engaged
 - **User Preferences:** Customizable notification settings
@@ -17,7 +18,7 @@ A web-based gaming platform built with Django featuring multiple interactive gam
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/Team4-CS321.git
+git clone https://github.com/dudette909/Team4-CS321
 cd Team4-CS321/myproject
 
 # Install all dependencies
@@ -32,7 +33,6 @@ python manage.py runserver
 
 Visit: **http://127.0.0.1:8000/**
 
-📖 **[Full Installation Guide](myproject/INSTALLATION.md)** - Detailed setup instructions, troubleshooting, and virtual environment setup
 
 ## 📋 Requirements
 
@@ -71,19 +71,7 @@ Team4-CS321/
 └── README.md                  # This file
 ```
 
-## 👥 Team Members
 
-- **Abhisek Bhujel** - Primary Developer (Dashboard, Games, Authentication, Email)
-- **trinity** - Database Architect (Models, Migrations, Virtual Buddy)
-- **Jj00703** - Project Manager (Setup, Configuration, Documentation, Bug Fixes)
-- **dudette909** - Media Manager (Assets, Testing Support)
-
-## 📚 Documentation
-
-- **[Project Documentation](docs/PROJECT_DOCUMENTATION.md)** - Complete project deliverable documentation
-- **[Bug Fixes Summary](docs/BUG_FIXES_SUMMARY.md)** - Recent improvements and fixes
-- **[Installation Guide](myproject/INSTALLATION.md)** - Detailed setup instructions
-- **[Environment Setup](myproject/ENV_SETUP.md)** - Environment variables guide
 
 ## 🛠️ Technologies Used
 
@@ -98,16 +86,25 @@ Team4-CS321/
 - Multiple difficulty levels
 - Category-based word selection
 - Letter tracking system
+- Score: Based on remaining attempts (max 60 points)
 
 ### 🐍 Snake
 - Canvas-based rendering
 - Collision detection
-- Score tracking
+- Dynamic speed increases
+- Score: 10 points per food eaten
 
 ### ⭕ Tic-Tac-Toe
 - Player vs Computer AI
 - Multiple difficulty levels
 - Win detection algorithm
+- Score: Win = 100, Tie = 50, Loss = 0
+
+### 🧩 Mind Mosaic
+- Sliding puzzle game
+- Multiple grid sizes (3x3, 4x4, 5x5)
+- Hint system and magic shuffle
+- Score: Based on moves (fewer = better, max 1000 points)
 
 ## 🔧 Development
 
@@ -125,16 +122,6 @@ Access admin panel at: **http://127.0.0.1:8000/admin/**
 python manage.py test
 ```
 
-### Environment Variables
-
-Copy `.env.example` to `.env` and configure:
-
-```env
-DJANGO_SECRET_KEY=your-secret-key-here
-DJANGO_DEBUG=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-```
 
 **Note:** The app works with defaults even without `.env` file!
 
@@ -157,15 +144,4 @@ EMAIL_HOST_PASSWORD=your-app-password
 
 See [LICENSE.md](LICENSE.md) for details.
 
-## 🤝 Contributing
 
-This is a class project for CS 321 - Software Engineering.
-
-## 📧 Contact
-
-For questions about this project, contact the team members through the course channels.
-
----
-
-**CS 321 - Software Engineering**  
-**Last Updated:** April 19, 2026

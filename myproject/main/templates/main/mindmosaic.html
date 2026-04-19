@@ -1042,6 +1042,45 @@
           diff: "medium",
           maxCorrectCount: 0,
         },
+        scoreSaved: false,
+        
+        // Get CSRF token from cookies
+        getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie) {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+              }
+            }
+          }
+          return cookieValue;
+        },
+        
+        // Save score to server (lower moves = better score)
+        saveScore(moves) {
+          if (this.scoreSaved) return;
+          this.scoreSaved = true;
+          
+          // Score calculation: fewer moves = higher score
+          // Perfect game ~15 moves = 850 points, 30 moves = 700 points, etc.
+          const finalScore = Math.max(0, 1000 - (moves * 10));
+          
+          fetch('/mindmosaic/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': this.getCookie('csrftoken')
+            },
+            body: JSON.stringify({ score: finalScore })
+          }).then(response => response.json())
+            .then(data => console.log('Score saved:', data))
+            .catch(error => console.error('Error saving score:', error));
+        },
+        
         init() {
           AudioController.init();
           let rT;
@@ -1076,6 +1115,7 @@
           });
         },
         startGame(d) {
+          this.scoreSaved = false; // Reset score saved flag
           this.state.diff = d;
           this.state.gridSize = d === "easy" ? 3 : d === "medium" ? 4 : 5;
           this.state.magicAvailable = d !== "easy";
@@ -1419,6 +1459,10 @@
           clearInterval(this.state.timerInterval);
           AudioController.play("win");
           this.startConfetti();
+          
+          // Save score to server
+          this.saveScore(this.state.moves);
+          
           const cb = localStorage.getItem(`mm_best_${this.state.diff}`);
           if (!cb || this.state.moves < parseInt(cb))
             localStorage.setItem(

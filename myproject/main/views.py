@@ -115,7 +115,13 @@ def virtualBuddy(request):
     return render(request, "main/virtualBuddy.html")
 
 
+@login_required
 def mindmosaic(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        score = data.get("score", 0)
+        save_user_score(request.user, "MindMosaic", score)
+        return JsonResponse({"status": "ok"})
     return render(request, "main/mindmosaic.html")
 
 
@@ -180,7 +186,7 @@ def leaderboard(request):
     """Display leaderboard for all games"""
     from .models import GameScore
     
-    games = ['Hangman', 'Snake', 'TicTacToe']
+    games = ['Hangman', 'Snake', 'TicTacToe', 'MindMosaic']
     leaderboard_data = {}
     user_stats = {}
     
