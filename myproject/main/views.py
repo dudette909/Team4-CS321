@@ -119,9 +119,10 @@ def virtualBuddy(request):
 @login_required
 def mines(request):
     result = GameResult.objects.filter(user=request.user, gameName="mines").first()
+    if result == None:
+        return render(request, "main/mines.html", {"lastPlayedDate": "", "dateToday": timezone.localdate()})
 
     lastTimePlayed = timezone.localtime(result.lastPlayedTime)
-
     context = {"lastPlayedDate": lastTimePlayed.date(), "dateToday": timezone.localdate()}
     return render(request, "main/mines.html", context)
 
