@@ -8,6 +8,7 @@ const minefield =
         "minefield"
     );
 let board = [];
+let cellMines = [];
 let gameOver = false;
 let victory = false;
 let tilesToReveal = numRows * numCols - numMines;
@@ -32,10 +33,12 @@ function initializeBoard() {
     while (minesPlaced < numMines) {
         const row = Math.floor(Math.random() * numRows);
         const col = Math.floor(Math.random() * numCols);
+        const cell = document.createElement( "div" );
         
         if (!board[row][col].isMine) {
             board[row][col].isMine = true;
             minesPlaced++;
+            cellMines.push(board[row][col]);
         }
     }
 
@@ -65,10 +68,17 @@ function revealCell(row, col) {
     }
 
     board[row][col].revealed = true;
-
+    
+    console.log(tilesToReveal)
     if (board[row][col].isMine) {
         // Handle game over
         alert("Game Over! You stepped on a mine.");
+        gameOver = true;
+       
+
+    } else if (tilesToReveal == 0) {
+        alert("Congrats, you've won!")
+        victory = true;
         gameOver = true;
     } else if ( board[row][col].count === 0 ) {
         // If cell has no mines nearby,
@@ -96,7 +106,7 @@ function toggleCell(row, col) {
 
 function renderBoard() {
     minefield.innerHTML = "";
-
+  
     for (let i = 0; i < numRows; i++) {
         for ( let j = 0; j < numCols; j++ ) {
             const cell = document.createElement( "div" );
@@ -124,11 +134,18 @@ function renderBoard() {
                 }
             }
             if (!gameOver) {
-                cell.addEventListener("click", () => revealCell(i, j));
+                cell.addEventListener("click", () => {
+                    if (gameOver) return;
+                    revealCell(i, j)
+                });
                 cell.addEventListener("contextmenu", (event) => {
+                    if (gameOver) return;
                     event.preventDefault();
                     toggleCell(i, j);
                 });
+            }
+            if (victory) {
+                cell.removeEventListener("click", () => revealCell(i, j))
             }
             minefield.appendChild(cell);   
         }
@@ -136,11 +153,12 @@ function renderBoard() {
             document.createElement("br")
         );
     }
+    
     if (tilesToReveal == 0) {
         victory = true;
         gameOver = true;
         
-        //alert("congratulations, you won!");
+        alert("congratulations, you won!");
     }
     if (gameOver) {
         endGame(victory);
