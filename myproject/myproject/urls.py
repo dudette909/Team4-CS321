@@ -31,6 +31,7 @@ urlpatterns = [
     path("snake/", views.snake, name="snake"),
     path("tictactoe/", views.tictactoe, name="tictactoe"),
     path("virtualBuddy/", views.virtualBuddy, name="virtualBuddy"),
+    path("mines/", views.mines, name="mines"),
     path("mindmosaic/", views.mindmosaic, name="mindmosaic"),
     path("random_game/", views.random_game, name="random_game"),
     path("track-game-click/", views.track_game_click, name="track_game_click"),

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Player, Game, InventoryItem, Backpack, GameScore
+from .models import Player, Game, InventoryItem, Backpack, GameScore, GameResult
 
 # Register your models here.
 @admin.register(Player)
@@ -35,3 +35,5 @@ class BackpackAdmin(admin.ModelAdmin):
     def get_items_count(self, obj):
         return obj.items.count()
     get_items_count.short_description = 'Items Count'
+
+admin.site.register(GameResult) # maybe change to be customized with @admin.register

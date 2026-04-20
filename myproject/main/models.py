@@ -18,8 +18,22 @@ class Backpack(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Backpack"
+    
+class GameResult(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    gameName = models.CharField(max_length=64) # like which game, for now there's only 1, but this should be for handling more games in the future.
+    lastPlayedTime = models.DateTimeField(null=True, blank=True)
+    hasPlayed = models.BooleanField(null=True, blank=True)
+    victory = models.BooleanField(null=True, blank=True)
+    redeemed = models.BooleanField(null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.user.username} {self.gameName} RESULTS"
 
+    class Meta:
+        unique_together=('user', 'gameName') # should prevent duplicate rows(?)
+
+# Seems to only be used for the email thing and used for game history tab.
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email_notifications = models.BooleanField(default=True)
@@ -42,7 +56,7 @@ class Game(models.Model):
             f"{self.name} - High Score: {self.high_score} - Played: {self.times_played}"
         )
 
-
+# Get rid of this class, we don't need it anymore. If anything just add a new field to GameResult class for "score". This appears to be unnecessarily complicated.
 class GameScore(models.Model):
     """Track individual user scores for each game"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='game_scores')

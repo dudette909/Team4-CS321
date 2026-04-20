@@ -1,0 +1,54 @@
+body {
+    color: blue;
+    text-align: center;
+    background-color: wheat;
+    border-radius: 25px;
+}
+
+.board {
+    display: inline-block;
+    margin: 25px;
+}
+
+.cell {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #55a;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+    cursor: pointer;
+
+    background-color: #eee;
+
+    color: #333;
+}
+
+.revealed {
+    background-color: #ccc;
+    color: #000;
+}
+
+.mine {
+    background-color: #ff3333;
+}
+
+.boxmessage {
+    display: none;
+    width: 100px;
+    height: 75px;
+    background-color: lightgrey;
+    border: 15px solid lightblue;
+    padding: 10px;
+}
+
+#back-button {
+    display: inline-block;
+    width: 300px;
+    height: 100px;
+    background-color: #55a;
+    border: 5px solid black;
+    text-align: center;
+    align-content: center;
+}

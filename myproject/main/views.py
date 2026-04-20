@@ -4,14 +4,12 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-import random
 from django.contrib.auth.models import User
-from .models import Player
 from .utils import *
-from .models import Game
+from .models import InventoryItem, Backpack, GameResult, Player, Game # So it's looking at OUR models.py file, and then imports the CLASS "Backpack" that we defined in there.
+import random
 import json
 from django.http import JsonResponse
-from datetime import datetime, timedelta
 
 
 # Create your views here.
@@ -112,7 +110,49 @@ def tictactoe(request):
 
 @login_required
 def virtualBuddy(request):
-    return render(request, "main/virtualBuddy.html")
+    backpack, created = Backpack.objects.get_or_create(user=request.user)
+    backpack = Backpack.objects.get(user=request.user)
+    #results = GameResult.objects.filter(user=request.user)
+    #resultsList = list(results)
+    return render(request, "main/virtualBuddy.html", {"backpack": backpack})
+
+@login_required
+def mines(request):
+    result = GameResult.objects.filter(user=request.user, gameName="mines").first()
+
+    lastTimePlayed = timezone.localtime(result.lastPlayedTime)
+
+    context = {"lastPlayedDate": lastTimePlayed.date(), "dateToday": timezone.localdate()}
+    return render(request, "main/mines.html", context)
+
+@login_required
+def saveMinesResults(request): # this should be the request from the js file, so the body if it was properly JSON.stringified should be smth like {"victory": true}
+    print("Received1: ", request.body)
+    if request.method == "POST":
+        data = json.loads(request.body) # so data should now be the string dictionary {"victory" : boolean_here}
+        victory = data.get("victory") # gets the value of key "victory" in dictionary "data"
+        print("Received2: ", victory) # idk how to use print statements to debug in django it doesn't show up in the terminal ):
+        GameResult.objects.update_or_create(user=request.user, gameName="mines", defaults={"lastPlayedTime": timezone.now(), "hasPlayed": True, "victory": victory} ) # It would update any old attempts b/c theyre from days before, or if they haven't attempted this puzzle at all ever, it SHOULD create a new row in database.
+        return JsonResponse({"status": "ok"}) # a basic success response to django from js. NOT the SUCCESS of the player, rather a success that the info was saved.
+    
+@login_required
+def checkRewards(request):
+    print("kys")
+    results = list(GameResult.objects.filter(user=request.user))
+    for result in results:
+        if result.victory == True:
+            if result.redeemed == False:
+                # add a new random InventoryItem to user's specific unique backpack here
+                print("hi")
+                backpack, _ = Backpack.objects.get_or_create(user=request.user)
+                unownedItems = InventoryItem.objects.exclude(id__in=backpack.values_list('id', flat=True))
+
+                if unownedItems.exists():
+                    newItem = random.choice(list(unownedItems))
+                    backpack.items.add(newItem)
+                else:
+                    print("User already owns all items")
+
 
 
 @login_required
