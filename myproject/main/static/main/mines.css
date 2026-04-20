@@ -42,3 +42,13 @@ body {
     border: 15px solid lightblue;
     padding: 10px;
 }
+
+#back-button {
+    display: inline-block;
+    width: 300px;
+    height: 100px;
+    background-color: #55a;
+    border: 5px solid black;
+    text-align: center;
+    align-content: center;
+}

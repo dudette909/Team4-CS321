@@ -10,6 +10,7 @@ const minefield =
 let board = [];
 let gameOver = false;
 let victory = false;
+let tilesToReveal = numRows * numCols - numMines;
 
 function initializeBoard() {
     for (let i = 0; i < numRows; i++) {
@@ -78,6 +79,7 @@ function revealCell(row, col) {
             }
         }
     }
+    tilesToReveal--;
     renderBoard();
 }
 
@@ -134,6 +136,12 @@ function renderBoard() {
             document.createElement("br")
         );
     }
+    if (tilesToReveal == 0) {
+        victory = true;
+        gameOver = true;
+        
+        //alert("congratulations, you won!");
+    }
     if (gameOver) {
         endGame(victory);
     }
@@ -147,7 +155,7 @@ function getCSRFToken() {
 }
 
 function endGame(viko) {
-    alert("endgame test");
+    //alert("endgame test");
     fetch("/save-mines-result/", { method: "POST", headers: {"Content-Type": "application/json", "X-CSRFToken": getCSRFToken()},
     body: JSON.stringify({victory: viko}) } ).then(response => response.json()).then(data => console.log(data));
     //alert("TEST")

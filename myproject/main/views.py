@@ -7,9 +7,10 @@ from django.utils import timezone
 
 
 from django.contrib.auth.models import User
-from .models import Backpack, GameResult # So it's looking at OUR models.py file, and then imports the CLASS "Backpack" that we defined in there.
+from .models import InventoryItem, Backpack, GameResult # So it's looking at OUR models.py file, and then imports the CLASS "Backpack" that we defined in there.
 import json
 from django.http import JsonResponse
+import random
 
 
 # Create your views here.
@@ -136,4 +137,12 @@ def checkRewards(request):
             if result.redeemed == False:
                 # add a new random InventoryItem to user's specific unique backpack here
                 print("hi")
+                backpack, _ = Backpack.objects.get_or_create(user=request.user)
+                unownedItems = InventoryItem.objects.exclude(id__in=backpack.values_list('id', flat=True))
+
+                if unownedItems.exists():
+                    newItem = random.choice(list(unownedItems))
+                    backpack.items.add(newItem)
+                else:
+                    print("User already owns all items")
         

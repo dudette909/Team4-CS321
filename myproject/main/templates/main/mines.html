@@ -28,6 +28,7 @@
             <p>You've already done today's puzzle, come back tomorrow! (:</p>
         </div>
         <p>Your progress will NOT be saved if you leave early! Complete the puzzle to save your results.</p>
+        <button type="button" onclick="history.back()">Back to Dashboard</button>
     </body>
     <script src="{% static 'main/js/mines.js' %}"></script>
     <script>
@@ -46,7 +47,7 @@
             var y = document.getElementById("minefield");
             y.style.display = "none";
         }
-        
 
     </script>
+
 </html>
