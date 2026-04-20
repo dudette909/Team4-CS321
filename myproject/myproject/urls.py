@@ -30,7 +30,6 @@ urlpatterns = [
     path("hangman/", views.hangman, name="hangman"),
     path("snake/", views.snake, name="snake"),
     path("tictactoe/", views.tictactoe, name="tictactoe"),
-    path("tiles/", views.tiles, name="tiles"),
     path("virtualBuddy/", views.virtualBuddy, name="virtualBuddy"),
     path("mines/", views.mines, name="mines"),
     path("blockedGame/", views.mines, name="blockedGame"),

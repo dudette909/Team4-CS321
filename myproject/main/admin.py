@@ -27,16 +27,3 @@ class GameScoreAdmin(admin.ModelAdmin):
     ordering = ['-score', '-date_played']
     date_hierarchy = 'date_played'
 
-@admin.register(InventoryItem)
-class InventoryItemAdmin(admin.ModelAdmin):
-    list_display = ['itemName', 'description']
-    search_fields = ['itemName']
-
-@admin.register(Backpack)
-class BackpackAdmin(admin.ModelAdmin):
-    list_display = ['user', 'get_items_count']
-    search_fields = ['user__username']
-    
-    def get_items_count(self, obj):
-        return obj.items.count()
-    get_items_count.short_description = 'Items Count'
