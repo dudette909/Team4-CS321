@@ -38,13 +38,24 @@
             <a href="#" class="nav-link active text-white">Home</a>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">Settings</a>
+            <a href="{% url 'leaderboard' %}" class="nav-link text-white"
+              >Leaderboard</a
+            >
           </li>
           <li>
-            <a href="#" class="nav-link text-white">Play-History</a>
+            <a href="{% url 'settings' %}" class="nav-link text-white"
+              >Settings</a
+            >
           </li>
           <li>
-            <a href="{% url 'virtualBuddy' %}" class="nav-link text-white">Virtual-Buddy</a>
+            <a href="{% url 'play_history' %}" class="nav-link text-white"
+              >Play-History</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'virtualBuddy' %}" class="nav-link text-white"
+              >Virtual-Buddy</a
+            >
           </li>
           <li>
             <a href="{% url 'loginPage' %}" class="nav-link text-white"
@@ -69,23 +80,31 @@
           </div>
 
           <div class="row g-4">
-            <div class="col-md-3">
-              <a href="{% url 'mines' %}" class="game-link">
+            <div class="col-3">
+              <a
+                href="{% url 'hangman' %}"
+                class="game-link"
+                onclick="trackClicks('Hangman')"
+              >
                 <div class="card dashboard-card">
                   <div class="card-body">
-                    <h2>Pac-Man</h2>
+                    <h2>Hangman</h2>
                     <img
-                      src="{% static 'main/images/pacman.jpg' %}"
+                      src="{% static 'main/images/hangman.png' %}"
                       class="card-img"
-                      alt="pacman"
+                      alt="hangman"
                     />
                   </div>
                 </div>
               </a>
             </div>
 
-            <div class="col-md-3">
-              <a href="{% url 'tictactoe' %}" class="game-link">
+            <div class="col-3">
+              <a
+                href="{% url 'tictactoe' %}"
+                class="game-link"
+                onclick="trackClicks('TicTacToe')"
+              >
                 <div class="card dashboard-card">
                   <div class="card-body">
                     <h2>Tic-Tac-toe</h2>
@@ -99,23 +118,31 @@
               </a>
             </div>
 
-            <div class="col-md-3">
-              <a href="{% url 'tiles' %}" class="game-link">
+            <div class="col-3">
+              <a
+                href="{% url 'mindmosaic' %}"
+                class="game-link"
+                onclick="trackClicks('MindMosaic')"
+              >
                 <div class="card dashboard-card">
                   <div class="card-body">
-                    <h2>Tiles</h2>
+                    <h2>Mind Mosaic</h2>
                     <img
-                      src="{% static 'main/images/tiles.jpg' %}"
+                      src="{% static 'main/images/mindmosaic.jpg' %}"
                       class="card-img"
-                      alt="Tiles"
+                      alt="Mind Mosaic"
                     />
                   </div>
                 </div>
               </a>
             </div>
 
-            <div class="col-md-3">
-              <a href="{% url 'snake' %}" class="game-link">
+            <div class="col-3">
+              <a
+                href="{% url 'snake' %}"
+                class="game-link"
+                onclick="trackClicks('Snake')"
+              >
                 <div class="card dashboard-card">
                   <div class="card-body">
                     <h2>Snake</h2>
@@ -131,10 +158,31 @@
           </div>
 
           <div class="play-button">
-            <a href="#" class="btn-random">Random Play</a>
+            <a href="{%url 'random_game'%}" class="btn-random">Random Play</a>
           </div>
         </div>
       </div>
     </div>
+    <script>
+      function getCSRFToken() {
+        return document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("csrftoken="))
+          ?.split("=")[1];
+      }
+
+      function trackClicks(gameName) {
+        fetch("/track-game-click/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSON.stringify({
+            game_name: gameName,
+          }),
+        });
+      }
+    </script>
   </body>
 </html>

@@ -27,7 +27,7 @@ urlpatterns = [
     path("login/", views.loginPage, name="loginPage"),
     path("register/", views.registerPage, name="registerPage"),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("pacman/", views.pacman, name="pacman"),
+    path("hangman/", views.hangman, name="hangman"),
     path("snake/", views.snake, name="snake"),
     path("tictactoe/", views.tictactoe, name="tictactoe"),
     path("tiles/", views.tiles, name="tiles"),
@@ -35,7 +35,16 @@ urlpatterns = [
     path("mines/", views.mines, name="mines"),
     path("blockedGame/", views.mines, name="blockedGame"),
     path("save-mines-result/", views.saveMinesResults, name="save-mines-result"),
-    path("checkRewards/", views.checkRewards, name="checkRewards")
+    path("checkRewards/", views.checkRewards, name="checkRewards"),
+
+    path("mindmosaic/", views.mindmosaic, name="mindmosaic"),
+    path("random_game/", views.random_game, name="random_game"),
+    path("track-game-click/", views.track_game_click, name="track_game_click"),
+    path("play-history/", views.play_history, name="play_history"),
+    path("settings/", views.settings, name="settings"),
+    path("logout/", views.logoutPage, name="logoutPage"),
+    path("leaderboard/", views.leaderboard, name="leaderboard"),
+    path("leaderboard/<str:game_name>/", views.game_leaderboard, name="game_leaderboard"),
 ]
 
 if settings.DEBUG:

@@ -1,1 +1,15 @@
 ...
+__pycache__/
+*.pyc
+db.sqlite3
+.DS_Store
+
+# Environment variables
+.env
+*.env
+.env.example
+
+# Documentation files (temporary/draft files)
+docs/*.docx
+docs/*.md
+docs/*.txt

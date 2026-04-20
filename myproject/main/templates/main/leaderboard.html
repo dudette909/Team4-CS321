@@ -1,0 +1,258 @@
+{% load static %}
+{% load leaderboard_extras %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaderboard - GameHub</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'main/dashboard.css' %}" />
+    <style>
+      body {
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        color: #ffffff;
+        font-family: 'Space Grotesk', sans-serif;
+        margin: 0;
+      }
+      
+      .main-content {
+        flex: 1;
+        background: transparent;
+        overflow-y: auto;
+      }
+      
+      .content-area {
+        padding: 20px;
+        background: transparent;
+      }
+      
+      .welcome-message h1 {
+        font-family: 'Orbitron', sans-serif;
+        color: #ffffff;
+      }
+      
+      .welcome-message p {
+        color: #aaa;
+      }
+      
+      .leaderboard-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      
+      .rank-badge {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 40px;
+        font-weight: bold;
+        margin-right: 10px;
+      }
+      
+      .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+      .rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); color: #000; }
+      .rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; }
+      .rank-other { background: rgba(255, 255, 255, 0.1); color: #fff; }
+      
+      .score-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.03);
+        transition: all 0.3s ease;
+      }
+      
+      .score-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateX(5px);
+      }
+      
+      .user-highlight {
+        background: rgba(76, 201, 240, 0.2) !important;
+        border: 2px solid #4cc9f0;
+      }
+      
+      .game-title {
+        font-family: 'Orbitron', sans-serif;
+        color: #4cc9f0;
+        margin-bottom: 20px;
+      }
+      
+      .user-stats {
+        background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(76, 201, 240, 0.05));
+        border: 2px solid #4cc9f0;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+      
+      .stat-label {
+        color: #aaa;
+        font-size: 0.9em;
+      }
+      
+      .stat-value {
+        color: #4cc9f0;
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+      
+      .view-all-btn {
+        background: linear-gradient(135deg, #4cc9f0, #3da8c9);
+        border: none;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+      }
+      
+      .view-all-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <div
+        class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+        style="width: 280px; min-height: 100vh"
+      >
+        <span class="fs-4">Game-Hub</span>
+        <hr />
+
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li>
+            <a href="{% url 'dashboard' %}" class="nav-link text-white">Home</a>
+          </li>
+          <li>
+            <a href="{% url 'leaderboard' %}" class="nav-link active text-white"
+              >Leaderboard</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'settings' %}" class="nav-link text-white"
+              >Settings</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'play_history' %}" class="nav-link text-white"
+              >Play-History</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'virtualBuddy' %}" class="nav-link text-white"
+              >Virtual-Buddy</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'logoutPage' %}" class="nav-link text-white"
+              >Logout</a
+            >
+          </li>
+        </ul>
+
+        <hr />
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="content-area">
+          <div class="welcome-message">
+            <h1>🏆 Leaderboard</h1>
+            <p>Compete with other players and climb the ranks!</p>
+          </div>
+
+          <!-- User Overall Stats -->
+          <div class="user-stats">
+            <h4>Your Stats, {{ request.user.username }}</h4>
+            <div class="row mt-3">
+              {% for game in games %}
+              {% with user_stats|get_item:game as stats %}
+              <div class="col-md-4">
+                <div class="text-center">
+                  <div class="stat-label">{{ game }}</div>
+                  <div class="stat-value">
+                    {% if stats.rank %}
+                      #{{ stats.rank }}
+                    {% else %}
+                      --
+                    {% endif %}
+                  </div>
+                  <div class="stat-label">
+                    Best: {{ stats.best_score|default:"0" }}
+                  </div>
+                </div>
+              </div>
+              {% endwith %}
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Leaderboards for Each Game -->
+          {% for game in games %}
+          <div class="leaderboard-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="game-title">{{ game }} Top 10</h3>
+              <a href="{% url 'game_leaderboard' game %}" class="view-all-btn">
+                View Full Leaderboard →
+              </a>
+            </div>
+
+            {% with leaderboard_data|get_item:game as scores %}
+              {% if scores %}
+                {% for score in scores %}
+                <div class="score-item {% if score.user == request.user %}user-highlight{% endif %}">
+                  <span class="rank-badge {% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% else %}rank-other{% endif %}">
+                    {{ forloop.counter }}
+                  </span>
+                  <div class="flex-grow-1">
+                    <strong>{{ score.user.username }}</strong>
+                    {% if score.user == request.user %}<span class="badge bg-primary">YOU</span>{% endif %}
+                  </div>
+                  <div class="text-end">
+                    <strong>{{ score.score }}</strong> points
+                    <br>
+                    <small class="text-muted">{{ score.date_played|date:"M d, Y" }}</small>
+                  </div>
+                </div>
+                {% endfor %}
+              {% else %}
+                <p class="text-muted text-center">No scores yet. Be the first to play!</p>
+              {% endif %}
+            {% endwith %}
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

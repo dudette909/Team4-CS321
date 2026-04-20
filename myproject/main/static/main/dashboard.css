@@ -2,6 +2,7 @@ body {
     background: #ffffff;
     color: #1a1a1a;
     font-family: 'Orbitron', sans-serif;
+    margin: 0;
 }
 
 .custom-navbar {
@@ -9,7 +10,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 14px 24px;
-    background: #212529;   
+    background: #212529;
     color: white;
     border-bottom: 1px solid #e5e7eb;
 }
@@ -38,20 +39,20 @@ body {
     display: flex;
     flex-direction: column;
     background: #ffffff;
+    min-width: 0;
 }
 
 .content-area {
     background: #ffffff;
-    padding: 24px;
+    padding: 10px 24px 20px;
 }
-
 
 h1 {
     color: #1a1a1a;
 }
 
 .card {
-    border-radius: 12px;
+    border-radius: 8px;
     border: none;
 }
 
@@ -61,12 +62,12 @@ h1 {
 }
 
 .dashboard-card {
-    height: 880px;
     background: #212529;
-    border: none; 
-    border-radius: 16px; 
-    /* padding: 20px; */
+    border: none;
+    border-radius: 16px;
     color: white;
+    height: 100%;
+    min-height: 420px;
 }
 
 .dashboard-card:hover {
@@ -74,55 +75,77 @@ h1 {
     transition: 0.2s ease;
 }
 
-.welcome-message{
-    margin-top: 20px;
-    margin-bottom: 20px;
+.card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.welcome-message {
+    margin-top: 0;
+    margin-bottom: 10px;
     text-align: center;
 }
 
 .welcome-message h1 {
     font-weight: 700;
 }
-.card-body h2{
-    text-align: center;
 
+.card-body h2 {
+    text-align: center;
 }
+
 .card-img {
-    flex-grow: 1;
     width: 100%;
-    height: 95%;
+    aspect-ratio: 3 / 4;
     object-fit: cover;
     display: block;
+    border-radius: 8px;
 }
-.play-button {
-    width: 100%;             
-    height: 200px;
 
+.play-button {
+    width: 100%;
+    min-height: 110px;
     display: flex;
-    justify-content: center;  
-    align-items: center;    
+    justify-content: center;
+    align-items: center;
 }
 
 .btn-random {
     display: inline-block;
-
-    padding: 22px 60px;       
-    font-size: 1.5rem;        
+    padding: 22px 40px;
+    font-size: 1.5rem;
     font-weight: 700;
-
-    background: #212529;      
+    background: #212529;
     color: white;
-
-    border-radius: 999px;
+    border-radius: 90px;
     text-decoration: none;
-
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-
     transition: all 0.25s ease;
 }
 
 .btn-random:hover {
     transform: translateY(-4px) scale(1.05);
-    background: #2c3034;      
+    background: #2c3034;
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 1200px) {
+    .custom-navbar {
+        padding: 14px 18px;
+    }
+
+    .dashboard-card {
+        min-height: 360px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .dashboard-card {
+        min-height: 850px;
+    }
+
+    .card-img {
+        aspect-ratio: 3/ 5;
+    }
 }

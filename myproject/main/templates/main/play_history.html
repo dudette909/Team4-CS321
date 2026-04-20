@@ -1,0 +1,89 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Play History</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'main/dashboard.css' %}" />
+  </head>
+  <body>
+    <div class="d-flex">
+      <div
+        class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+        style="width: 280px; height: 100vh"
+      >
+        <span class="fs-4">Game-Hub</span>
+        <hr />
+
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li>
+            <a href="{% url 'dashboard' %}" class="nav-link text-white">Home</a>
+          </li>
+          <li>
+            <a href="{% url 'leaderboard' %}" class="nav-link text-white"
+              >Leaderboard</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'settings' %}" class="nav-link text-white"
+              >Settings</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'play_history' %}"
+              class="nav-link active text-white"
+              >Play-History</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'virtualBuddy' %}" class="nav-link text-white"
+              >Virtual-Buddy</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'loginPage' %}" class="nav-link text-white"
+              >Logout</a
+            >
+          </li>
+        </ul>
+
+        <hr />
+      </div>
+
+      <div class="main-content">
+        <div class="content-area">
+          <div class="welcome-message">
+            <h1>Most Played Games</h1>
+          </div>
+
+          <div class="card dashboard-card p-4">
+            {% for game in ranked_games %}
+            <div
+              class="d-flex justify-content-between align-items-center py-3 border-bottom"
+            >
+              <div>
+                <strong>{{ forloop.counter }}. {{ game.name }}</strong>
+              </div>
+              <div>{{ game.times_played }} plays</div>
+            </div>
+            {% empty %}
+            <p>No game data available yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
