@@ -60,29 +60,40 @@
 
                 <hr />
             </div>
-
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="content-area">
-                    <div class="welcome-message">
-                        <h1>Virtual Buddy</h1>
-                        <p>Your AI companion for gaming advice and support</p>
-                    </div>
-
-                    <!-- Virtual Buddy Content Goes Here -->
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="text-muted">Virtual Buddy feature coming soon...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <script
-          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-          crossorigin="anonymous"
-        ></script>
+        <div class = "buddy-container">
+            <!-- LEFT: THE AVATAR -->
+            <div class="avatar-selection">
+                <img src="/media/test_image.png" class="avatar">
+
+            </div>
+
+            <!-- RIGHT: Inventory Grid -->
+            <div class="inventory-section">
+                <div class="grid">
+                    {% for item in backpack.items.all %}
+                    <!--
+                        <p>TEST ITEM: {{ item.itemName }}</p>
+                        <img src="{{ item.itemImage.url }}" style="width:100px;">
+                    -->
+                        <div class="cell-container">
+                        
+                            <div class="cell">
+                                <img src="{{ item.itemImage.url }}" alt="{{ item.itemName }}">
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>NO ITEMS</p>
+                    {% endfor %}
+                </div>
+                <p>yo whats popping my crew</p>
+                {{ results }}
+                {% for result in results %}
+                    {{ result.victory }}
+                    if
+                {% endfor %}
+            </div>
+        </div>
     </body>
 </html>
