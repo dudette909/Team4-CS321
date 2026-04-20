@@ -19,6 +19,19 @@ class Backpack(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Backpack"
 
+class GameResult(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    gameName = models.CharField(max_length=64) # like which game, for now there's only 1, but this should be for handling more games in the future.
+    lastPlayedTime = models.DateTimeField(null=True, blank=True)
+    hasPlayed = models.BooleanField(null=True, blank=True)
+    victory = models.BooleanField(null=True, blank=True)
+    redeemed = models.BooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} {self.gameName} RESULTS"
+
+    class Meta:
+        unique_together=('user', 'gameName') # should prevent duplicate rows(?)
 
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

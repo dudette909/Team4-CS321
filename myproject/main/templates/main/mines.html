@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #panel {
+                display: none;
+                width: 400px;
+                height: 100px;
+                background-color: lightgrey;
+                border: 15px solid lightblue;
+                border-radius: 20px;
+                padding: 10px;
+                text-align: center;
+                align-content: center;
+                align-self: center;
+            }
+        </style>
+        <title>Minesweeper</title>
+    </head>
+    <link rel="stylesheet" href="{% static 'main/mines.css' %}" />
+
+    <body>
+
+        <h1>Mines here ya go</h1>
+        <div id="minefield"></div>
+        <div id="panel">
+            <p>You've already done today's puzzle, come back tomorrow! (:</p>
+        </div>
+        <p>Your progress will NOT be saved if you leave early! Complete the puzzle to save your results.</p>
+        <button type="button" onclick="history.back()">Back to Dashboard</button>
+    </body>
+    <script src="{% static 'main/js/mines.js' %}"></script>
+    <script>
+        // window.onload = function(){
+        //     console.log('Hi Trinity');
+        // }
+        const thing = "{{ lastPlayedDate }}"
+        const todayDate = "{{ dateToday }}"
+        console.log(thing)
+        console.log("hi")
+        console.log(todayDate)
+        if (thing == todayDate) {
+            console.log("gbrhjnehjsbfhje")
+            var x = document.getElementById("panel");
+            x.style.display = "inline-block";
+            var y = document.getElementById("minefield");
+            y.style.display = "none";
+        }
+
+    </script>
+
+</html>

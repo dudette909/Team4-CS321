@@ -4,18 +4,8 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Virtual Buddy - GameHub</title>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-          crossorigin="anonymous"
-        />
-        <link rel="stylesheet" href="{% static 'main/dashboard.css' %}" />
+        <title>Testing Virtual Buddy page</title>
+        <link rel="stylesheet" href="{% static 'main/virtualbuddy.css' %}" />
     </head>
     <body>
         <div class="d-flex">
@@ -27,62 +17,38 @@
                 <span class="fs-4">Game-Hub</span>
                 <hr />
 
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li>
-                        <a href="{% url 'dashboard' %}" class="nav-link text-white">Home</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'leaderboard' %}" class="nav-link text-white"
-                          >Leaderboard</a
-                        >
-                    </li>
-                    <li>
-                        <a href="{% url 'settings' %}" class="nav-link text-white"
-                          >Settings</a
-                        >
-                    </li>
-                    <li>
-                        <a href="{% url 'play_history' %}" class="nav-link text-white"
-                          >Play-History</a
-                        >
-                    </li>
-                    <li>
-                        <a href="{% url 'virtualBuddy' %}" class="nav-link active text-white"
-                          >Virtual-Buddy</a
-                        >
-                    </li>
-                    <li>
-                        <a href="{% url 'loginPage' %}" class="nav-link text-white"
-                          >Logout</a
-                        >
-                    </li>
-                </ul>
+    <div class = "buddy-container">
+        <!-- LEFT: THE AVATAR -->
+         <div class="avatar-selection">
+            <img src="/media/test_image.png" class="avatar">
 
-                <hr />
-            </div>
+         </div>
 
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="content-area">
-                    <div class="welcome-message">
-                        <h1>Virtual Buddy</h1>
-                        <p>Your AI companion for gaming advice and support</p>
-                    </div>
-
-                    <!-- Virtual Buddy Content Goes Here -->
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="text-muted">Virtual Buddy feature coming soon...</p>
+        <!-- RIGHT: Inventory Grid -->
+         <div class="inventory-section">
+            <div class="grid">
+                {% for item in backpack.items.all %}
+                <!--
+                    <p>TEST ITEM: {{ item.itemName }}</p>
+                    <img src="{{ item.itemImage.url }}" style="width:100px;">
+                -->
+                    <div class="cell-container">
+                    
+                        <div class="cell">
+                            <img src="{{ item.itemImage.url }}" alt="{{ item.itemName }}">
                         </div>
                     </div>
-                </div>
+                {% empty %}
+                    <p>NO ITEMS</p>
+                {% endfor %}
             </div>
-        </div>
+            <p>yo whats popping my crew</p>
+            {{ results }}
+            {% for result in results %}
+                {{ result.victory }}
+                if
+            {% endfor %}
+         </div>
+    </div>
 
-        <script
-          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-          crossorigin="anonymous"
-        ></script>
-    </body>
 </html>
