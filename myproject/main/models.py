@@ -47,7 +47,17 @@ class Player(models.Model):
         return f"{self.user.username} - {self.email_notifications} - {self.user.email}"
 
 
-# Maybe? get rid of this class. If anything just add a new field to GameResult class for "score"
+class Game(models.Model):
+    name = models.CharField(max_length=100)
+    high_score = models.IntegerField(default=0)
+    times_played = models.IntegerField(default=0)
+
+    def __str__(self):
+        return (
+            f"{self.name} - High Score: {self.high_score} - Played: {self.times_played}"
+        )
+
+
 class GameScore(models.Model):
     """Track individual user scores for each game"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='game_scores')

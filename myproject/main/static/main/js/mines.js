@@ -1,14 +1,12 @@
 // mines.js
+// consts up here, add function to change the rows and cols and number of mines later
 const numRows = 8;
 const numCols = 8;
 const numMines = 10;
+const minefield = document.getElementById("minefield");
 
-const minefield =
-    document.getElementById(
-        "minefield"
-    );
 let board = [];
-let cellMines = [];
+let tileMines = [];
 let gameOver = false;
 let victory = false;
 let tilesToReveal = numRows * numCols - numMines;
@@ -33,12 +31,12 @@ function initializeBoard() {
     while (minesPlaced < numMines) {
         const row = Math.floor(Math.random() * numRows);
         const col = Math.floor(Math.random() * numCols);
-        const cell = document.createElement( "div" );
+        const tile = document.createElement( "div" );
         
         if (!board[row][col].isMine) {
             board[row][col].isMine = true;
             minesPlaced++;
-            cellMines.push(board[row][col]);
+            tileMines.push(board[row][col]);
         }
     }
 
@@ -62,7 +60,7 @@ function initializeBoard() {
     }
 }
 
-function revealCell(row, col) {
+function revealTile(row, col) {
     if ( row < 0 || row >= numRows || col < 0 || col >= numCols || board[row][col].revealed || board[row][col].flagged) {
         return;
     }
@@ -81,11 +79,11 @@ function revealCell(row, col) {
         victory = true;
         gameOver = true;
     } else if ( board[row][col].count === 0 ) {
-        // If cell has no mines nearby,
-        // Reveal adjacent cells
+        // If tile has no mines nearby,
+        // Reveal adjacent tiles
         for ( let dx = -1; dx <= 1; dx++ ) {
             for ( let dy = -1; dy <= 1; dy++ ) {
-                revealCell( row + dx, col + dy );
+                revealTile( row + dx, col + dy );
             }
         }
     }
@@ -93,7 +91,7 @@ function revealCell(row, col) {
     renderBoard();
 }
 
-function toggleCell(row, col) {
+function toggleTile(row, col) {
     if ( row < 0 || row >= numRows || col < 0 || col >= numCols || board[row][col].revealed ) {
         return;
     }
@@ -109,49 +107,47 @@ function renderBoard() {
   
     for (let i = 0; i < numRows; i++) {
         for ( let j = 0; j < numCols; j++ ) {
-            const cell = document.createElement( "div" );
-            cell.className = "cell";
+            const tile = document.createElement( "div" );
+            tile.className = "tile";
             if (board[i][j].flagged) {
-                cell.classList.add("flagged");
-                cell.textContent = "\u{1F6A9}";
+                tile.classList.add("flagged");
+                tile.textContent = "\u{1F6A9}";
             } else {
-                if (cell.classList.contains("flagged")) {
-                    cell.classList.remove("flagged");
-                    cell.textContent = "";
+                if (tile.classList.contains("flagged")) {
+                    tile.classList.remove("flagged");
+                    tile.textContent = "";
                 }
             }
             if ( board[i][j].revealed ) {
-                cell.classList.add("revealed");
+                tile.classList.add("revealed");
 
                 if ( board[i][j].isMine ) { // the game over, you clicked a mine
-                    cell.classList.add( "mine" );
-                    cell.textContent = "\u{1F4A3}";
+                    tile.classList.add( "mine" );
+                    tile.textContent = "\u{1F4A3}";
                     victory = false;
                     //gameOver = true;
 
                 } else if ( board[i][j].count > 0 ) {
-                    cell.textContent = board[i][j].count;
+                    tile.textContent = board[i][j].count;
                 }
             }
             if (!gameOver) {
-                cell.addEventListener("click", () => {
+                tile.addEventListener("click", () => {
                     if (gameOver) return;
-                    revealCell(i, j)
+                    revealTile(i, j)
                 });
-                cell.addEventListener("contextmenu", (event) => {
+                tile.addEventListener("contextmenu", (event) => {
                     if (gameOver) return;
                     event.preventDefault();
-                    toggleCell(i, j);
+                    toggleTile(i, j);
                 });
             }
             if (victory) {
-                cell.removeEventListener("click", () => revealCell(i, j))
+                tile.removeEventListener("click", () => revealTile(i, j))
             }
-            minefield.appendChild(cell);   
+            minefield.appendChild(tile);   
         }
-        minefield.appendChild(
-            document.createElement("br")
-        );
+        minefield.appendChild(document.createElement("br"));
     }
     
     if (tilesToReveal == 0) {
@@ -176,7 +172,7 @@ function endGame(viko) {
     //alert("endgame test");
     console.log("entered the endgame function")
     fetch("/save-mines-result/", { method: "POST", headers: {"Content-Type": "application/json", "X-CSRFToken": getCSRFToken()},
-    body: JSON.stringify({victory: viko}) } ).then(response => response.json()).then(data => console.log(data));
+    body: JSON.stringify({victory: viko, game: "mines"}) } ).then(response => response.json()).then(data => console.log(data));
     console.log("after the fetch")
     //alert("TEST")
 }

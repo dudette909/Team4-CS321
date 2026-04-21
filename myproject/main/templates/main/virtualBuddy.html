@@ -67,7 +67,26 @@
         <div class = "buddy-container">
             <!-- LEFT: THE AVATAR -->
             <div class="avatar-selection">
-                <img src="myproject\media\test_image.png" class="avatar">
+                <style>
+                    .container {
+                        position: relative;
+                        width: 100px;
+                        height: 200px;
+                    }
+                    .base-image {
+                        position: relative;
+                        z-index: 1;
+                    }
+                    .overlay-image {
+                        position: absolute;
+                        z-index: 2;
+                    }
+                </style>
+                <div class="container">
+                    <img src="" class="base-image">
+                    <img src="" class="overlay-image"
+                </div>
+                <img src="{% static 'main/images/catreact.png' %}" class="avatar">
 
             </div>
 

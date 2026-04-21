@@ -8,6 +8,12 @@ class PlayerAdmin(admin.ModelAdmin):
     list_filter = ['email_notifications']
     search_fields = ['user__username', 'user__email']
 
+@admin.register(Game)
+class GameAdmin(admin.ModelAdmin):
+    list_display = ['name', 'high_score', 'times_played']
+    list_filter = ['name']
+    ordering = ['-times_played']
+
 @admin.register(GameScore)
 class GameScoreAdmin(admin.ModelAdmin):
     list_display = ['user', 'game_name', 'score', 'date_played']

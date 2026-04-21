@@ -134,9 +134,10 @@ def saveMinesResults(request): # this should be the request from the js file, so
         
         data = json.loads(request.body) # so data should now be the string dictionary {"victory" : boolean_here}
         victory = data.get("victory") # gets the value of key "victory" in dictionary "data"
+        doodleBob = data.get("game")
         print("Received2: ", victory) # idk how to use print statements to debug in django it doesn't show up in the terminal ):
 
-        result, created = GameResult.objects.update_or_create(user=request.user, gameName="mines", defaults={"lastPlayedTime": timezone.now(), "hasPlayed": True, "victory": victory} )
+        result, created = GameResult.objects.update_or_create(user=request.user, gameName=doodleBob, defaults={"lastPlayedTime": timezone.now(), "hasPlayed": True, "victory": victory} )
         # It would update any old attempts b/c theyre from days before, or if they haven't attempted this puzzle at all ever, it SHOULD create a new row in database.
         if not created:
             result.timesPlayed += 1
