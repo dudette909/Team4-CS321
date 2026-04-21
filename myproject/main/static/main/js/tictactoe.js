@@ -297,7 +297,9 @@ function showResult(isDraw, winner) {
     modalWinnerAnnouncement.querySelector(".icon-winner").style.color =
       winner === "x" ? "var(--clr-light-blue)" : "var(--clr-light-yellow)";
   }
-  
+  // fetch here to save to GameResults
+  // fetch("/save-mines-result/", { method: "POST", headers: {"Content-Type": "application/json", "X-CSRFToken": getCSRFToken()},
+  //   body: JSON.stringify({victory: winnerIsPlayer, game: "tictactoe"}) } ).then(response => response.json()).then(data => console.log(data));
   saveScore(gameScore); // Save score to server
   updateScoreboard();
   showModal(resultModal);
