@@ -174,8 +174,10 @@ function getCSRFToken() {
 
 function endGame(viko) {
     //alert("endgame test");
+    console.log("entered the endgame function")
     fetch("/save-mines-result/", { method: "POST", headers: {"Content-Type": "application/json", "X-CSRFToken": getCSRFToken()},
     body: JSON.stringify({victory: viko}) } ).then(response => response.json()).then(data => console.log(data));
+    console.log("after the fetch")
     //alert("TEST")
 }
 

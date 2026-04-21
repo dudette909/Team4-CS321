@@ -26,6 +26,7 @@ class GameResult(models.Model):
     hasPlayed = models.BooleanField(null=True, blank=True)
     victory = models.BooleanField(null=True, blank=True)
     redeemed = models.BooleanField(null=True, blank=True)
+    timesPlayed = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.user.username} {self.gameName} RESULTS"
