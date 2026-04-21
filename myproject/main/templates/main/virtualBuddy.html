@@ -70,7 +70,7 @@
                 <style>
                     .container {
                         position: relative;
-                        width: 100px;
+                        width: 200px;
                         height: 200px;
                     }
                     .base-image {
@@ -79,14 +79,19 @@
                     }
                     .overlay-image {
                         position: absolute;
+                        top: -100px;
+                        left: 100px;
                         z-index: 2;
                     }
                 </style>
                 <div class="container">
-                    <img src="" class="base-image">
-                    <img src="" class="overlay-image"
+                    <img src="{% static 'main/images/virtualbuddy1.png' %}" class="base-image">
+                    <!-- equipped item here -->
+                    {% if backpack.equipped_item %}
+                        <img src="{{ backpack.equipped_item.itemImage.url }}" class="overlay-image">
+                    {% endif %}
                 </div>
-                <img src="{% static 'main/images/catreact.png' %}" class="avatar">
+                <!-- <img src="{% static 'main/images/catreact.png' %}" class="avatar"> -->
 
             </div>
 
@@ -102,19 +107,23 @@
                         
                             <div class="cell">
                                 <img src="{{ item.itemImage.url }}" alt="{{ item.itemName }}">
+
+                                <form method="POST" action="{% url 'equip_item' item.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Equip</button>
+                                </form>
                             </div>
                         </div>
                     {% empty %}
                         <p>NO ITEMS</p>
                     {% endfor %}
                 </div>
-                <p>yo whats popping my crew</p>
-                {{ results }}
-                {% for result in results %}
-                    {{ result.victory }}
-                    if
-                {% endfor %}
+                <form method="POST" action="{% url 'checkRewards' %}">
+                    {% csrf_token %}
+                    <button type="submit">Check Rewards</button>
+                </form>
             </div>
         </div>
+        <a href="{% url 'dashboard' %}" class="button">Back To Dashboard</a>
     </body>
 </html>

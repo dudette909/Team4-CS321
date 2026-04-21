@@ -34,7 +34,7 @@ urlpatterns = [
     path("mines/", views.mines, name="mines"),
     path("save-mines-result/", views.saveMinesResults, name="save-mines-result"),
     path("checkRewards/", views.checkRewards, name="checkRewards"),
-    
+    path('equip/<int:item_id>/', views.equipItem, name='equip_item'),
     path("mindmosaic/", views.mindmosaic, name="mindmosaic"),
     path("random_game/", views.random_game, name="random_game"),
     path("track-game-click/", views.track_game_click, name="track_game_click"),

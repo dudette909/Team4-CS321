@@ -16,6 +16,8 @@ class Backpack(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(InventoryItem, blank=True)
 
+    equipped_item = models.ForeignKey(InventoryItem, null=True, blank=True, on_delete=models.SET_NULL, related_name="equippedItem")
+
     def __str__(self):
         return f"{self.user.username}'s Backpack"
     

@@ -117,6 +117,15 @@ def virtualBuddy(request):
     #resultsList = list(results)
     return render(request, "main/virtualBuddy.html", {"backpack": backpack})
 
+def equipItem(request, item_id):
+    backpack = Backpack.objects.get(user=request.user)
+    item = InventoryItem.objects.get(id=item_id)
+
+    if item in backpack.items.all():
+        backpack.equipped_item = item
+        backpack.save()
+    return redirect('virtualBuddy')
+
 @login_required
 def mines(request):
     result = GameResult.objects.filter(user=request.user, gameName="mines").first() #what if they've never played this one game before?
@@ -147,24 +156,26 @@ def saveMinesResults(request): # this should be the request from the js file, so
             result.save()
 
         return JsonResponse({"status": "ok"}) # a basic success response to django from js. NOT the SUCCESS of the player, rather a success that the info was saved.
-    
+
 @login_required
 def checkRewards(request):
-    print("kys")
-    results = list(GameResult.objects.filter(user=request.user))
-    for result in results:
-        if result.victory == True:
-            if result.redeemed == False:
-                # add a new random InventoryItem to user's specific unique backpack here
-                print("hi")
-                backpack, _ = Backpack.objects.get_or_create(user=request.user)
-                unownedItems = InventoryItem.objects.exclude(id__in=backpack.values_list('id', flat=True))
+    if request.method == "POST":
+        results = list(GameResult.objects.filter(user=request.user))
+        for result in results:
+            if result.victory == True:
+                if result.redeemed == False:
+                    # add a new random InventoryItem to user's specific unique backpack here
+                    print("hi")
+                    backpack, _ = Backpack.objects.get_or_create(user=request.user)
+                    ownedItems = backpack.items.values_list('id', flat=True)
+                    unownedItems = InventoryItem.objects.exclude(id__in=ownedItems)
 
-                if unownedItems.exists():
-                    newItem = random.choice(list(unownedItems))
-                    backpack.items.add(newItem)
-                else:
-                    print("User already owns all items")
+                    if unownedItems.exists():
+                        newItem = random.choice(list(unownedItems))
+                        backpack.items.add(newItem)
+                    else:
+                        print("User already owns all items")
+    return redirect('virtualBuddy')
 
 
 
