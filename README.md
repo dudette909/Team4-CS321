@@ -4,7 +4,7 @@ A web-based gaming platform built with Django featuring multiple interactive gam
 
 ## 🎮 Features
 
-- **4 Interactive Games:** Hangman, Snake, Tic-Tac-Toe, and Mind Mosaic
+- **4 Interactive Games:** Hangman, Mines, Tic-Tac-Toe, and Mind Mosaic
 - **User Authentication:** Secure login and registration system
 - **Leaderboard System:** Track and compete with per-user score rankings
 - **Game Analytics:** Track play history and high scores
@@ -88,11 +88,12 @@ Team4-CS321/
 - Letter tracking system
 - Score: Based on remaining attempts (max 60 points)
 
-### 🐍 Snake
-- Canvas-based rendering
-- Collision detection
-- Dynamic speed increases
-- Score: 10 points per food eaten
+### 💣 Mines
+- Document Object Model (DOM) board rendering
+- Left click to reveal tiles, Right click to flag tiles
+- 10 mines per board
+- 1 attempt each day on new board, resets at your local midnight time
+- Reveal all tiles to win and avoid the mines!
 
 ### ⭕ Tic-Tac-Toe
 - Player vs Computer AI
