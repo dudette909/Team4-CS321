@@ -10,7 +10,7 @@ body {
     margin: 25px;
 }
 
-.cell {
+.tile {
     width: 30px;
     height: 30px;
     border: 2px solid #55a;
