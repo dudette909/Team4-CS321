@@ -4,14 +4,13 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-import random
 from django.contrib.auth.models import User
-from .models import Player
 from .utils import *
-from .models import Game
+from .models import InventoryItem, Backpack, GameResult, Player, Game # So it's looking at OUR models.py file, and then imports the CLASS "Backpack" that we defined in there.
+from django.db.models import F
+import random
 import json
 from django.http import JsonResponse
-from datetime import datetime, timedelta
 
 
 # Create your views here.
@@ -112,7 +111,72 @@ def tictactoe(request):
 
 @login_required
 def virtualBuddy(request):
-    return render(request, "main/virtualBuddy.html")
+    backpack, created = Backpack.objects.get_or_create(user=request.user)
+    backpack = Backpack.objects.get(user=request.user)
+    #results = GameResult.objects.filter(user=request.user)
+    #resultsList = list(results)
+    return render(request, "main/virtualBuddy.html", {"backpack": backpack})
+
+def equipItem(request, item_id):
+    backpack = Backpack.objects.get(user=request.user)
+    item = InventoryItem.objects.get(id=item_id)
+
+    if item in backpack.items.all():
+        backpack.equipped_item = item
+        backpack.save()
+    return redirect('virtualBuddy')
+
+@login_required
+def mines(request):
+    result = GameResult.objects.filter(user=request.user, gameName="mines").first() #what if they've never played this one game before?
+    if result == None:
+        return render(request, "main/mines.html", {"lastPlayedDate": "", "dateToday": timezone.localdate()})
+
+    lastTimePlayed = timezone.localtime(result.lastPlayedTime)
+    context = {"lastPlayedDate": lastTimePlayed.date(), "dateToday": timezone.localdate()}
+    return render(request, "main/mines.html", context)
+
+@login_required # change this method to be able to save any game, not just mines! I'd like to note this is already great to build off of and should be very easy to tweak to make it so any game can use this one function! FIRST TRY BABEYYYY
+def saveMinesResults(request): # this should be the request from the js file, so the body if it was properly JSON.stringified should be smth like {"victory": true}
+    print("Received1: ", request.body)
+    if request.method == "POST":
+        
+        data = json.loads(request.body) # so data should now be the string dictionary {"victory" : boolean_here}
+        victory = data.get("victory") # gets the value of key "victory" in dictionary "data"
+        doodleBob = data.get("game")
+        print("Received2: ", victory) # idk how to use print statements to debug in django it doesn't show up in the terminal ):
+
+        result, created = GameResult.objects.update_or_create(user=request.user, gameName=doodleBob, defaults={"lastPlayedTime": timezone.now(), "hasPlayed": True, "victory": victory} )
+        # It would update any old attempts b/c theyre from days before, or if they haven't attempted this puzzle at all ever, it SHOULD create a new row in database.
+        if not created:
+            result.timesPlayed += 1
+            result.lastPlayedTime = timezone.now().date()
+            result.victory = victory
+            result.hasPlayed = True
+            result.save()
+
+        return JsonResponse({"status": "ok"}) # a basic success response to django from js. NOT the SUCCESS of the player, rather a success that the info was saved.
+
+@login_required
+def checkRewards(request):
+    if request.method == "POST":
+        results = list(GameResult.objects.filter(user=request.user))
+        for result in results:
+            if result.victory == True:
+                if result.redeemed == False:
+                    # add a new random InventoryItem to user's specific unique backpack here
+                    print("hi")
+                    backpack, _ = Backpack.objects.get_or_create(user=request.user)
+                    ownedItems = backpack.items.values_list('id', flat=True)
+                    unownedItems = InventoryItem.objects.exclude(id__in=ownedItems)
+
+                    if unownedItems.exists():
+                        newItem = random.choice(list(unownedItems))
+                        backpack.items.add(newItem)
+                    else:
+                        print("User already owns all items")
+    return redirect('virtualBuddy')
+
 
 
 @login_required
@@ -129,7 +193,7 @@ def mindmosaic(request):
 def random_game(request):
     games = [
         "main/hangman.html",
-        "main/snake.html",
+        "main/mines.html",
         "main/tictactoe.html",
         "main/mindmosaic.html",
     ]
@@ -147,15 +211,9 @@ def track_game_click(request):
 
 
 def play_history(request):
-    ranked_games = Game.objects.order_by("-times_played")
+    res = list(GameResult.objects.filter(user=request.user)) # should return a query set of all rows that have the username its looking for, and then turn THAT into a list
 
-    return render(
-        request,
-        "main/play_history.html",
-        {
-            "ranked_games": ranked_games,
-        },
-    )
+    return render(request, "main/play_history.html", {"results": res}) # simpler and easier, no need to create unnecessary objects
 
 
 @login_required

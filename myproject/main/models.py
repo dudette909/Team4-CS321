@@ -16,10 +16,27 @@ class Backpack(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(InventoryItem, blank=True)
 
+    equipped_item = models.ForeignKey(InventoryItem, null=True, blank=True, on_delete=models.SET_NULL, related_name="equippedItem")
+
     def __str__(self):
         return f"{self.user.username}'s Backpack"
+    
+class GameResult(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    gameName = models.CharField(max_length=64) # like which game, for now there's only 1, but this should be for handling more games in the future.
+    lastPlayedTime = models.DateTimeField(null=True, blank=True)
+    hasPlayed = models.BooleanField(null=True, blank=True)
+    victory = models.BooleanField(null=True, blank=True)
+    redeemed = models.BooleanField(null=True, blank=True)
+    timesPlayed = models.IntegerField(default=1)
 
+    def __str__(self):
+        return f"{self.user.username} {self.gameName} RESULTS"
 
+    class Meta:
+        unique_together=('user', 'gameName') # should prevent duplicate rows(?)
+
+# Seems to only be used for the email thing and used for game history tab.
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email_notifications = models.BooleanField(default=True)

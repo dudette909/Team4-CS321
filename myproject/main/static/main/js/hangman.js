@@ -21,7 +21,8 @@ function getCookie(name) {
 function saveScore(finalScore) {
   if (scoreSaved) return; // Prevent duplicate saves
   scoreSaved = true;
-  
+  // fetch("/save-mines-result/", { method: "POST", headers: {"Content-Type": "application/json", "X-CSRFToken": getCSRFToken()},
+  //   body: JSON.stringify({victory: viko, game: "mines"}) } ).then(response => response.json()).then(data => console.log(data));
   fetch('/hangman/', {
     method: 'POST',
     headers: {

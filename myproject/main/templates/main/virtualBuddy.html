@@ -5,7 +5,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Virtual Buddy - GameHub</title>
-        <link
+        <!-- <link
           href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
@@ -15,11 +15,12 @@
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
           crossorigin="anonymous"
         />
-        <link rel="stylesheet" href="{% static 'main/dashboard.css' %}" />
+        <link rel="stylesheet" href="{% static 'main/dashboard.css' %}" /> -->
+        <link rel="stylesheet" href="{% static 'main/virtualbuddy.css' %}" />
     </head>
     <body>
-        <div class="d-flex">
-            <!-- Sidebar -->
+        <!-- <div class="d-flex">
+            Sidebar
             <div
                 class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
                 style="width: 280px; height: 100vh"
@@ -60,29 +61,69 @@
 
                 <hr />
             </div>
+        </div> -->
 
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="content-area">
-                    <div class="welcome-message">
-                        <h1>Virtual Buddy</h1>
-                        <p>Your AI companion for gaming advice and support</p>
-                    </div>
-
-                    <!-- Virtual Buddy Content Goes Here -->
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="text-muted">Virtual Buddy feature coming soon...</p>
-                        </div>
-                    </div>
+        <!-- <link rel="stylesheet" href="{% static 'main/virtualbuddy.css' %}" /> -->
+        <div class = "buddy-container">
+            <!-- LEFT: THE AVATAR -->
+            <div class="avatar-selection">
+                <style>
+                    .container {
+                        position: relative;
+                        width: 200px;
+                        height: 200px;
+                    }
+                    .base-image {
+                        position: relative;
+                        z-index: 1;
+                    }
+                    .overlay-image {
+                        position: absolute;
+                        top: -100px;
+                        left: 100px;
+                        z-index: 2;
+                    }
+                </style>
+                <div class="container">
+                    <img src="{% static 'main/images/virtualbuddy1.png' %}" class="base-image">
+                    <!-- equipped item here -->
+                    {% if backpack.equipped_item %}
+                        <img src="{{ backpack.equipped_item.itemImage.url }}" class="overlay-image">
+                    {% endif %}
                 </div>
+                <!-- <img src="{% static 'main/images/catreact.png' %}" class="avatar"> -->
+
+            </div>
+
+            <!-- RIGHT: Inventory Grid -->
+            <div class="inventory-section">
+                <div class="grid">
+                    {% for item in backpack.items.all %}
+                    <!--
+                        <p>TEST ITEM: {{ item.itemName }}</p>
+                        <img src="{{ item.itemImage.url }}" style="width:100px;">
+                    -->
+                        <div class="cell-container">
+                        
+                            <div class="cell">
+                                <img src="{{ item.itemImage.url }}" alt="{{ item.itemName }}">
+
+                                <form method="POST" action="{% url 'equip_item' item.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Equip</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>NO ITEMS</p>
+                    {% endfor %}
+                </div>
+                <form method="POST" action="{% url 'checkRewards' %}">
+                    {% csrf_token %}
+                    <button type="submit">Check Rewards</button>
+                </form>
             </div>
         </div>
-
-        <script
-          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-          crossorigin="anonymous"
-        ></script>
+        <a href="{% url 'dashboard' %}" class="button">Back To Dashboard</a>
     </body>
 </html>
